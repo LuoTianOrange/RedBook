@@ -93,7 +93,7 @@
                         </div>
                         <!--内容展示部分-->
                         <div class="main-container">
-                            <div class="main-item" v-for="i in 15">
+                            <!-- <div class="main-item" v-for="i in 15">
                                 <div class="main-item-top">
                                     <img style="object-fit: cover;width: 100%;" src="/images/141414.png">
                                 </div>
@@ -101,17 +101,106 @@
                                     <span style="margin-bottom: 8px;">大家有没有烧钱且小众的爱好😱</span>
                                     <div style="display: flex;justify-content: space-between;margin-top: 8px;">
                                         <div style="display: flex;align-items: center;">
-                                            <img style="margin-right: 5px;border-radius: 50%;width: 25px;height: 25px;overflow: hidden;" src="/images/imageMogr2.jpg" />
+                                            <img style="margin-right: 5px;border-radius: 50%;width: 25px;height: 25px;overflow: hidden;"
+                                                src="/images/imageMogr2.jpg" />
                                             <span>杰瑞</span>
                                         </div>
                                         <div style="display: flex;align-items: center;">
-                                            <div style="margin-right: 5px;"><i-like theme="outline" size="20" fill="#333"/></div>
-                                            <div>34</div>
+                                            <div style="margin-right: 5px;"><i-like theme="outline" size="20"
+                                                    fill="#333" /></div>
+                                            <div>1234</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <div class="column-flex" style="display: flex;">
+                                <div class="main-item" v-for="i in 15">
+                                    <div class="main-item-top">
+                                        <img style="object-fit: cover;width: 100%;" src="/images/141414.png">
+                                    </div>
+                                    <div class="main-item-bottom">
+                                        <span style="margin-bottom: 8px;">大家有没有烧钱且小众的爱好😱</span>
+                                        <div style="display: flex;justify-content: space-between;margin-top: 8px;">
+                                            <div style="display: flex;align-items: center;">
+                                                <img style="margin-right: 5px;border-radius: 50%;width: 25px;height: 25px;overflow: hidden;"
+                                                    src="/images/imageMogr2.jpg" />
+                                                <span>杰瑞</span>
+                                            </div>
+                                            <div style="display: flex;align-items: center;">
+                                                <div style="margin-right: 5px;"><i-like theme="outline" size="20"
+                                                        fill="#333" /></div>
+                                                <div>1234</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="column-flex" style="display: flex;">
+                                <div class="main-item" v-for="i in 15">
+                                    <div class="main-item-top">
+                                        <img style="object-fit: cover;width: 100%;" src="/images/141414.png">
+                                    </div>
+                                    <div class="main-item-bottom">
+                                        <span style="margin-bottom: 8px;">大家有没有烧钱且小众的爱好😱</span>
+                                        <div style="display: flex;justify-content: space-between;margin-top: 8px;">
+                                            <div style="display: flex;align-items: center;">
+                                                <img style="margin-right: 5px;border-radius: 50%;width: 25px;height: 25px;overflow: hidden;"
+                                                    src="/images/imageMogr2.jpg" />
+                                                <span>杰瑞</span>
+                                            </div>
+                                            <div style="display: flex;align-items: center;">
+                                                <div style="margin-right: 5px;"><i-like theme="outline" size="20"
+                                                        fill="#333" /></div>
+                                                <div>1234</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column-flex" style="display: flex;">
+                                <div class="main-item" v-for="i in 15">
+                                    <div class="main-item-top">
+                                        <img style="object-fit: cover;width: 100%;" src="/images/141414.png">
+                                    </div>
+                                    <div class="main-item-bottom">
+                                        <span style="margin-bottom: 8px;">大家有没有烧钱且小众的爱好😱</span>
+                                        <div style="display: flex;justify-content: space-between;margin-top: 8px;">
+                                            <div style="display: flex;align-items: center;">
+                                                <img style="margin-right: 5px;border-radius: 50%;width: 25px;height: 25px;overflow: hidden;"
+                                                    src="/images/imageMogr2.jpg" />
+                                                <span>杰瑞</span>
+                                            </div>
+                                            <div style="display: flex;align-items: center;">
+                                                <div style="margin-right: 5px;"><i-like theme="outline" size="20"
+                                                        fill="#333" /></div>
+                                                <div>44</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column-flex" style="display: flex;">
+                                <div class="main-item" v-for="i in 15">
+                                    <div class="main-item-top">
+                                        <img style="object-fit: cover;width: 100%;" src="/images/141414.png">
+                                    </div>
+                                    <div class="main-item-bottom">
+                                        <span style="margin-bottom: 8px;">大家有没有烧钱且小众的爱好😱</span>
+                                        <div style="display: flex;justify-content: space-between;margin-top: 8px;">
+                                            <div style="display: flex;align-items: center;">
+                                                <img style="margin-right: 5px;border-radius: 50%;width: 25px;height: 25px;overflow: hidden;"
+                                                    src="/images/imageMogr2.jpg" />
+                                                <span>杰瑞</span>
+                                            </div>
+                                            <div style="display: flex;align-items: center;">
+                                                <div style="margin-right: 5px;"><i-like theme="outline" size="20"
+                                                        fill="#333" /></div>
+                                                <div>1234</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </el-main>
                 </el-container>
@@ -257,25 +346,29 @@ const userLikeNav = [
     overflow: auto;
     padding-right: 40px;
 }
-.main-container .main-item{
+
+.main-container .main-item {
     flex: 0 0 20%;
     max-width: calc(20% - 10px);
     padding: 0 5px;
 }
-.main-item{
+
+.main-item {
     min-height: 220px;
     min-width: 200px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+
 .main-item-top {
     max-height: 290px;
     max-width: 220px;
     border-radius: 20px;
     overflow: hidden;
 }
-.main-item-bottom{
+
+.main-item-bottom {
     padding: 10px;
     width: 200px;
     font-size: 14px;
