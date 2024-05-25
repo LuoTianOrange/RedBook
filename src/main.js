@@ -8,7 +8,6 @@ import {install} from '@icon-park/vue-next/es/all';
 import '@icon-park/vue-next/styles/index.css';
 import router from './router/index'
 
-
 const app = createApp(App)
 app.use(ElementPlus)
 app.use(router)

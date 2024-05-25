@@ -237,7 +237,7 @@ const userLikeNav = [
     }]
 </script>
 
-<style>
+<style scoped>
 /*屏幕大小检测*/
 /* @media screen and (max-width: 950px) {
     .menu {
