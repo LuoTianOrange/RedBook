@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="common-layout">
-            <el-container style="min-height: 100vh;">
+            <el-container>
                 <el-aside width="220px" class="menu">
                     <div
                         style="height: 60px;display: flex;flex-direction: row;justify-content: flex-start;align-items: center;">
@@ -84,7 +84,7 @@
                             </el-sub-menu>
                         </el-menu>
                     </el-header>
-                    <el-main class="c">
+                    <el-main class="el-main-css">
                         <!--内容导航栏-->
                         <div class="main-nav">
                             <div v-for="(item, index) in userLikeNav" :key="item.no" class="main-nav-item"
@@ -92,110 +92,26 @@
                                 {{ item.name }}</div>
                         </div>
                         <!--内容展示部分-->
-                        <div class="main-container">
-                            <!-- <div class="main-item" v-for="i in 15">
-                                <div class="main-item-top">
-                                    <img style="object-fit: cover;width: 100%;" src="/images/141414.png">
-                                </div>
-                                <div class="main-item-bottom">
-                                    <span style="margin-bottom: 8px;">大家有没有烧钱且小众的爱好😱</span>
-                                    <div style="display: flex;justify-content: space-between;margin-top: 8px;">
-                                        <div style="display: flex;align-items: center;">
-                                            <img style="margin-right: 5px;border-radius: 50%;width: 25px;height: 25px;overflow: hidden;"
-                                                src="/images/imageMogr2.jpg" />
-                                            <span>杰瑞</span>
+                        <div style="max-height: calc(100vh - 200px);overflow: auto;">
+                            <div class="main-container-flex">
+                                <div class="main-container" v-for="list in groupedItems">
+                                    <div class="main-item" v-for="info in list">
+                                        <div class="main-item-top">
+                                            <img style="object-fit: cover;width: 100%;" :src="info.note_cover">
                                         </div>
-                                        <div style="display: flex;align-items: center;">
-                                            <div style="margin-right: 5px;"><i-like theme="outline" size="20"
-                                                    fill="#333" /></div>
-                                            <div>1234</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
-                            <div class="column-flex" style="display: flex;">
-                                <div class="main-item" v-for="i in 15">
-                                    <div class="main-item-top">
-                                        <img style="object-fit: cover;width: 100%;" src="/images/141414.png">
-                                    </div>
-                                    <div class="main-item-bottom">
-                                        <span style="margin-bottom: 8px;">大家有没有烧钱且小众的爱好😱</span>
-                                        <div style="display: flex;justify-content: space-between;margin-top: 8px;">
-                                            <div style="display: flex;align-items: center;">
-                                                <img style="margin-right: 5px;border-radius: 50%;width: 25px;height: 25px;overflow: hidden;"
-                                                    src="/images/imageMogr2.jpg" />
-                                                <span>杰瑞</span>
-                                            </div>
-                                            <div style="display: flex;align-items: center;">
-                                                <div style="margin-right: 5px;"><i-like theme="outline" size="20"
-                                                        fill="#333" /></div>
-                                                <div>1234</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="column-flex" style="display: flex;">
-                                <div class="main-item" v-for="i in 15">
-                                    <div class="main-item-top">
-                                        <img style="object-fit: cover;width: 100%;" src="/images/141414.png">
-                                    </div>
-                                    <div class="main-item-bottom">
-                                        <span style="margin-bottom: 8px;">大家有没有烧钱且小众的爱好😱</span>
-                                        <div style="display: flex;justify-content: space-between;margin-top: 8px;">
-                                            <div style="display: flex;align-items: center;">
-                                                <img style="margin-right: 5px;border-radius: 50%;width: 25px;height: 25px;overflow: hidden;"
-                                                    src="/images/imageMogr2.jpg" />
-                                                <span>杰瑞</span>
-                                            </div>
-                                            <div style="display: flex;align-items: center;">
-                                                <div style="margin-right: 5px;"><i-like theme="outline" size="20"
-                                                        fill="#333" /></div>
-                                                <div>1234</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="column-flex" style="display: flex;">
-                                <div class="main-item" v-for="i in 15">
-                                    <div class="main-item-top">
-                                        <img style="object-fit: cover;width: 100%;" src="/images/141414.png">
-                                    </div>
-                                    <div class="main-item-bottom">
-                                        <span style="margin-bottom: 8px;">大家有没有烧钱且小众的爱好😱</span>
-                                        <div style="display: flex;justify-content: space-between;margin-top: 8px;">
-                                            <div style="display: flex;align-items: center;">
-                                                <img style="margin-right: 5px;border-radius: 50%;width: 25px;height: 25px;overflow: hidden;"
-                                                    src="/images/imageMogr2.jpg" />
-                                                <span>杰瑞</span>
-                                            </div>
-                                            <div style="display: flex;align-items: center;">
-                                                <div style="margin-right: 5px;"><i-like theme="outline" size="20"
-                                                        fill="#333" /></div>
-                                                <div>44</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="column-flex" style="display: flex;">
-                                <div class="main-item" v-for="i in 15">
-                                    <div class="main-item-top">
-                                        <img style="object-fit: cover;width: 100%;" src="/images/141414.png">
-                                    </div>
-                                    <div class="main-item-bottom">
-                                        <span style="margin-bottom: 8px;">大家有没有烧钱且小众的爱好😱</span>
-                                        <div style="display: flex;justify-content: space-between;margin-top: 8px;">
-                                            <div style="display: flex;align-items: center;">
-                                                <img style="margin-right: 5px;border-radius: 50%;width: 25px;height: 25px;overflow: hidden;"
-                                                    src="/images/imageMogr2.jpg" />
-                                                <span>杰瑞</span>
-                                            </div>
-                                            <div style="display: flex;align-items: center;">
-                                                <div style="margin-right: 5px;"><i-like theme="outline" size="20"
-                                                        fill="#333" /></div>
-                                                <div>1234</div>
+                                        <div class="main-item-bottom">
+                                            <span style="margin-bottom: 8px;">{{ info.title }}</span>
+                                            <div style="display: flex;justify-content: space-between;margin-top: 8px;">
+                                                <div style="display: flex;align-items: center;">
+                                                    <img style="margin-right: 5px;border-radius: 50%;width: 25px;height: 25px;overflow: hidden;"
+                                                        src="/images/imageMogr2.png" />
+                                                    <span>杰瑞</span>
+                                                </div>
+                                                <div style="display: flex;align-items: center;">
+                                                    <div style="margin-right: 5px;"><i-like theme="outline" size="20"
+                                                            fill="#333" /></div>
+                                                    <div>34</div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -210,7 +126,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 
 let imgsrc = new URL(`../../assets/images/${name}.png`, import.meta.url).href
@@ -235,9 +151,132 @@ const userLikeNav = [
         no: 2,
         name: '美食'
     }]
+
+const item_group = ref([
+    {
+        id: 1,
+        title: "大家有没有烧钱且小众的爱好😱",
+        note_cover: "/images/imageMogr1.png",
+    },
+    {
+        id: 2,
+        title: "大家有没有烧钱且小",
+        note_cover: "/images/imageMogr4.png",
+    },
+    {
+        id: 1,
+        title: "大家有没有烧钱且小众的爱好😱",
+        note_cover: "/images/imageMogr1.png",
+    },
+    {
+        id: 2,
+        title: "大家有没有烧钱且小",
+        note_cover: "/images/imageMogr4.png",
+    },
+    {
+        id: 1,
+        title: "大家有没有烧钱且小众的爱好😱",
+        note_cover: "/images/imageMogr1.png",
+    },
+    {
+        id: 2,
+        title: "大家有没有烧钱且小",
+        note_cover: "/images/imageMogr4.png",
+    },
+    {
+        id: 1,
+        title: "大家有没有烧钱且小众的爱好😱",
+        note_cover: "/images/imageMogr1.png",
+    },
+    {
+        id: 2,
+        title: "大家有没有烧钱且小",
+        note_cover: "/images/imageMogr4.png",
+    },
+    {
+        id: 1,
+        title: "大家有没有烧钱且小众的爱好😱",
+        note_cover: "/images/imageMogr1.png",
+    },
+    {
+        id: 2,
+        title: "大家有没有烧钱且小",
+        note_cover: "/images/imageMogr4.png",
+    },
+    {
+        id: 1,
+        title: "大家有没有烧钱且小众的爱好😱",
+        note_cover: "/images/imageMogr1.png",
+    },
+    {
+        id: 2,
+        title: "大家有没有烧钱且小",
+        note_cover: "/images/imageMogr4.png",
+    },
+    {
+        id: 1,
+        title: "大家有没有烧钱且小众的爱好😱",
+        note_cover: "/images/imageMogr1.png",
+    },
+    {
+        id: 2,
+        title: "大家有没有烧钱且小",
+        note_cover: "/images/imageMogr4.png",
+    },
+    {
+        id: 1,
+        title: "大家有没有烧钱且小众的爱好😱",
+        note_cover: "/images/imageMogr1.png",
+    },
+    {
+        id: 2,
+        title: "大家有没有烧钱且小",
+        note_cover: "/images/imageMogr4.png",
+    },
+    {
+        id: 1,
+        title: "大家有没有烧钱且小众的爱好😱",
+        note_cover: "/images/imageMogr1.png",
+    },
+    {
+        id: 2,
+        title: "大家有没有烧钱且小",
+        note_cover: "/images/imageMogr4.png",
+    },
+])
+
+const groupedItems = computed(() => {
+    let groups = [];
+
+    // 每组元素数
+    let groupSize = 3;
+
+    if (groups.length % 2 == 0 && groups.length % 3 == 0) {
+        groupSize = 3;
+    } else if (groups.length % 2 == 0 && groups.length % 3 != 0) {
+        groupSize = 2;
+    }
+    for (let i = 0; i < item_group.value.length; i += groupSize) {
+        groups.push(item_group.value.slice(i, i + groupSize));
+    }
+    return groups;
+})
 </script>
 
 <style scoped>
+/*滚动条隐藏*/
+::-webkit-scrollbar {
+    display: none;
+}
+
+/*Main*/
+.el-main-css {
+    max-width: 1728px;
+    min-width: 320px;
+    margin: 0 auto;
+}
+
+/* 菜单*/
 /*屏幕大小检测*/
 /* @media screen and (max-width: 950px) {
     .menu {
@@ -336,21 +375,21 @@ const userLikeNav = [
     cursor: pointer;
 }
 
+.main-container-flex {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
 .main-container {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
-    justify-content: space-between;
     padding: 0 20px;
     max-height: calc(100% - 72px);
     height: 100%;
     overflow: auto;
-    padding-right: 40px;
-}
-
-.main-container .main-item {
-    flex: 0 0 20%;
-    max-width: calc(20% - 10px);
-    padding: 0 5px;
 }
 
 .main-item {
