@@ -1,7 +1,7 @@
 <script>
 import { RouterView } from 'vue-router';
 import { KeepAlive } from 'vue';
-import Main from './components/pages/userpages/Main.vue'
+import Main from './components/pages/home/Main.vue'
 
 export default {
   name: 'App',

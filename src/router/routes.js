@@ -3,13 +3,23 @@ const routes = [
         path: '/',
         name: 'Main',
         title: '首页',
-        component: () => import('../components/pages/userpages/Main.vue'),
+        component: () => import('../components/pages/home/Main.vue'),
+        redirect: '/home',
+        children:[
+            {
+                path: 'home',
+                name: 'Home',
+                title: '发现',
+                component: () => import('../components/pages/home/Home.vue'),
+            },
+            {
+                path: 'noitce',
+                name: 'Noitce',
+                title: '通知',
+                component: () => import('../components/pages/home/Noitce.vue'),
+            }
+        ]
     },
-    {
-        path: '/test',
-        name: 'Test',
-        title: '首页',
-        component: () => import('../components/pages/userpages/Test.vue'),
-    }
+
 ]
 export default routes
