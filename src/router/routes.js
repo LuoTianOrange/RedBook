@@ -13,10 +13,25 @@ const routes = [
                 component: () => import('../components/pages/home/Home.vue'),
             },
             {
-                path: 'noitce',
-                name: 'Noitce',
+                path: 'notice',
+                name: 'Notice',
                 title: '通知',
-                component: () => import('../components/pages/home/Noitce.vue'),
+                component: () => import('../components/pages/home/Notice.vue'),
+                redirect: '/notice/comments',
+                children:[
+                    {
+                        path: 'comments',
+                        name: 'Comments',
+                        title: '评论和@',
+                        component: () => import('../components/pages/home/Comments.vue'),
+                    },
+                    {
+                        path: 'collections',
+                        name: 'Collections',
+                        title: '点赞和收藏',
+                        component: () => import('../components/pages/home/Collections.vue'),
+                    }
+                ]
             }
         ]
     },

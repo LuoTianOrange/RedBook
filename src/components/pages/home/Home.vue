@@ -165,6 +165,8 @@ const groupedItems = computed(() => {
     }
     return groups;
 })
+
+
 </script>
 
 <style scoped>
@@ -180,48 +182,14 @@ const groupedItems = computed(() => {
     margin: 0 auto;
 }
 
-/* 菜单*/
-/*屏幕大小检测*/
-/* @media screen and (max-width: 950px) {
-    .menu {
-        display: none;
-    }
-} */
-
-@media screen and (min-width: 950px) {
-    .menu {
-        display: flex;
-    }
-}
-
 .menu {
     flex-direction: column;
-}
-
-.menu-item {
-    display: flex;
-    align-items: center;
-    margin: 5px 10px 5px 10px;
-    padding: 4px 0;
-    cursor: pointer;
-    height: 40px;
-    border-radius: 20px;
-}
-
-.menu-item:hover {
-    background-color: #f5f5f5;
-
 }
 
 .isSelect {
     background-color: #f0f0f0;
 }
 
-.menu-item-box {
-    padding: 0 20px;
-    display: flex;
-    align-items: center;
-}
 
 /*搜索框input */
 .el-input__wrapper {
@@ -252,10 +220,6 @@ const groupedItems = computed(() => {
 
 .header-left-item {
     margin: 0 15px;
-}
-
-.c {
-    /* border: 1px solid #000; */
 }
 
 .el-menu--horizontal {

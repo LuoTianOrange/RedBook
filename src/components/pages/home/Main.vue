@@ -2,7 +2,7 @@
     <div>
         <div class="main-container">
             <el-container style="height: 100vh;">
-                <el-aside width="220px" class="menu">
+                <el-aside width="240px" class="menu">
                     <div
                         style="height: 60px;display: flex;flex-direction: row;justify-content: flex-start;align-items: center;">
                         <img style="width: 80px;margin-left: 30px;" src="/images/小红书logo.png" />
@@ -24,7 +24,7 @@
                             <div>发布</div>
                         </div>
                     </div>
-                    <router-link :to="{ name: 'Noitce' }" class="menu-item" @click="ChangeColor(3)"
+                    <router-link :to="{ name: 'Notice' }" class="menu-item" @click="ChangeColor(3)"
                         :class="{ 'isSelect': selected === 3 }">
                         <div class="menu-item-box">
                             <el-icon style="margin-right: 15px;">
@@ -37,6 +37,11 @@
                         <div class="menu-item-box">
                             <div style="margin-right: 15px;">🦆</div>
                             <div>我</div>
+                        </div>
+                    </div>
+                    <div class="menu-item-login">
+                        <div class="menu-item-box" style="margin: 0 auto;">
+                            <div>登录</div>
                         </div>
                     </div>
                     <div style="margin-top: auto;"></div>
@@ -55,8 +60,7 @@
                         <el-input v-model="searchbox" style="width: 500px;height: 40px;" size="large"
                             placeholder="搜索小红书" :suffix-icon="Search" />
                         <div style="flex-grow: 1;"></div>
-                        <el-menu :default-active="activeIndex" mode="horizontal" class="el-menu-demo"
-                            style="width: 320px;">
+                        <el-menu mode="horizontal" class="el-menu-demo" style="width: 320px;">
                             <el-sub-menu index="1">
                                 <template #title>创作中心</template>
                                 <el-menu-item index="1-1">创作服务</el-menu-item>
@@ -230,7 +234,7 @@ const groupedItems = computed(() => {
     margin: 0 auto;
 }
 
-.main-container{
+.main-container {
     min-height: 100vh;
 }
 
@@ -260,11 +264,26 @@ const groupedItems = computed(() => {
     cursor: pointer;
     height: 40px;
     border-radius: 20px;
+    font-weight: bolder;
 }
 
 .menu-item:hover {
-    background-color: #f5f5f5;
+    background-color: #f0f0f0;
 
+}
+
+.menu-item-login{
+    display: flex;
+    align-items: center;
+    margin: 5px 10px 5px 10px;
+    padding: 4px 0;
+    cursor: pointer;
+    height: 40px;
+    border-radius: 20px;
+    font-weight: bolder;
+    background-color: #ff2e4d;
+    color: #fff;
+    text-align: center;
 }
 
 .isSelect {
