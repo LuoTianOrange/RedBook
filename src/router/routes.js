@@ -32,6 +32,12 @@ const routes = [
                         component: () => import('../components/pages/home/Collections.vue'),
                     }
                 ]
+            },
+            {
+                path: 'myinfo',
+                name: 'MyInfo',
+                title: '我的',
+                component: () => import('../components/pages/home/MyInfo.vue'),
             }
         ]
     },

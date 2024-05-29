@@ -33,13 +33,14 @@
                             <div>通知</div>
                         </div>
                     </router-link>
-                    <div class="menu-item" @click="ChangeColor(4)" :class="{ 'isSelect': selected === 4 }">
+                    <router-link :to="{ name: 'MyInfo' }" class="menu-item" @click="ChangeColor(4)"
+                        :class="{ 'isSelect': selected === 4 }">
                         <div class="menu-item-box">
                             <div style="margin-right: 15px;">🦆</div>
                             <div>我</div>
                         </div>
-                    </div>
-                    <div class="menu-item-login">
+                    </router-link>
+                    <div class="menu-item-login" @click="LoginVisible = true">
                         <div class="menu-item-box" style="margin: 0 auto;">
                             <div>登录</div>
                         </div>
@@ -54,7 +55,7 @@
                         </div>
                     </div>
                 </el-aside>
-                <el-container class="c">
+                <el-container>
                     <el-header class="header">
                         <div style="flex-grow: 1;"></div>
                         <el-input v-model="searchbox" style="width: 500px;height: 40px;" size="large"
@@ -92,13 +93,43 @@
                     </el-header>
                     <router-view></router-view>
                 </el-container>
+
+                <!--登录界面-->
+                <el-dialog v-model="LoginVisible">
+                    <div class="el-login">
+                        <div style="flex: 1;" class="tb-center el-login-left">
+                            <img src="/images/小红书logo.png" style="max-width: 80px;" />
+                            <div class="qrcode-box-border">
+                                <div class="qrcode-box">
+                                    <img src="/images/QRCode.png" />
+                                </div>
+                            </div>
+                        </div>
+                        <div style="flex: 1;" class="tb-center el-login-right">
+                            <div>账号登录</div>
+                            <div class="login-input-box">
+                                <el-input class="input" autocomplete="off" placeholder="输入账号"></el-input>
+                                <el-input class="input" autocomplete="off" placeholder="输入密码"></el-input>
+                                <div class="login-btn">
+                                    <div class="menu-item-box" style="margin: 0 auto;">
+                                        <div>登录</div>
+                                    </div>
+                                </div>
+                                <div class="rl-center login-pwd">
+                                    <div>忘记密码</div>
+                                    <div style="margin-left: 20px;">注册账号</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </el-dialog>
             </el-container>
         </div>
     </div>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, reactive } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 
 let imgsrc = new URL(`../../assets/images/${name}.png`, import.meta.url).href
@@ -219,6 +250,8 @@ const groupedItems = computed(() => {
     }
     return groups;
 })
+
+const LoginVisible = ref(false)
 </script>
 
 <style scoped>
@@ -262,7 +295,7 @@ const groupedItems = computed(() => {
     margin: 5px 10px 5px 10px;
     padding: 4px 0;
     cursor: pointer;
-    height: 40px;
+    height: 35px;
     border-radius: 20px;
     font-weight: bolder;
 }
@@ -272,13 +305,13 @@ const groupedItems = computed(() => {
 
 }
 
-.menu-item-login{
+.menu-item-login {
     display: flex;
     align-items: center;
     margin: 5px 10px 5px 10px;
     padding: 4px 0;
     cursor: pointer;
-    height: 40px;
+    height: 35px;
     border-radius: 20px;
     font-weight: bolder;
     background-color: #ff2e4d;
@@ -327,11 +360,109 @@ const groupedItems = computed(() => {
     margin: 0 15px;
 }
 
-.c {
-    /* border: 1px solid #000; */
-}
-
 .el-menu--horizontal {
     flex-direction: row-reverse !important;
+}
+
+/* 登录界面 */
+::v-deep .el-dialog {
+    max-width: 700px !important;
+    border-radius: 20px;
+}
+
+@media screen and (min-width: 950px) {
+    ::v-deep .el-dialog {
+        min-width: 700px !important;
+        border-radius: 20px;
+    }
+
+
+}
+@media screen and (max-width: 950px) {
+    ::v-deep .el-dialog {
+        min-width: 320px !important;
+        border-radius: 20px;
+    }
+    .el-login-left {
+        display: none;
+    }
+    
+}
+
+.el-login {
+    height: 400px;
+    width: 100%;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 20px;
+    display: flex;
+}
+
+.el-login-left {
+    border-right: 1px solid #f0f0f0;
+    padding: 20px;
+}
+
+.el-login-right {
+    padding: 20px;
+}
+
+.qrcode-box {
+    width: 120px;
+    height: 120px;
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.qrcode-box img {
+    width: 100%;
+    height: 100%;
+}
+
+.qrcode-box-border {
+    border: 25px solid rgb(252, 252, 252);
+    border-radius: 40px;
+    margin-top: 50px;
+}
+
+.input {
+    max-width: 260px;
+    width: 100%;
+    height: 40px;
+    border-radius: 20px;
+    margin-top: 12px;
+    font-size: 16px;
+    /* margin-left: 30px; */
+}
+
+.login-input-box {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.login-btn {
+    display: flex;
+    align-items: center;
+    margin-top: 40px;
+    padding: 4px 0;
+    cursor: pointer;
+    height: 35px;
+    border-radius: 20px;
+    font-weight: bolder;
+    background-color: #ff2e4d;
+    color: #fff;
+    text-align: center;
+    font-size: 16px;
+    width: 80%;
+}
+
+.login-pwd {
+    font-size: 14px;
+    margin-top: 50px;
+    cursor: pointer;
 }
 </style>
