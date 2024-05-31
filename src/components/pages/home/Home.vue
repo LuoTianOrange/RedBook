@@ -8,7 +8,7 @@
                     {{ item.name }}</div>
             </div>
             <!--内容展示部分-->
-            <div style="max-height: calc(100vh - 200px);overflow: auto;">
+            <div style="max-height: calc(100vh - 190px);overflow: auto;">
                 <div class="main-container-flex">
                     <div class="main-container" v-for="list in groupedItems">
                         <div class="main-item" v-for="info in list">
@@ -58,6 +58,35 @@ const userLikeNav = [
 
 const item_group = ref([
     {
+        id: 1,
+        title: "大家有没有烧钱且小众的爱好😱",
+        note_cover: "/images/imageMogr1.png",
+    },
+    {
+        id: 2,
+        title: "大家有没有烧钱且小",
+        note_cover: "/images/imageMogr4.png",
+    },
+    {
+        id: 1,
+        title: "大家有没有烧钱且小众的爱好😱",
+        note_cover: "/images/imageMogr1.png",
+    },
+    {
+        id: 2,
+        title: "大家有没有烧钱且小",
+        note_cover: "/images/imageMogr4.png",
+    },
+    {
+        id: 1,
+        title: "大家有没有烧钱且小众的爱好😱",
+        note_cover: "/images/imageMogr1.png",
+    },
+    {
+        id: 2,
+        title: "大家有没有烧钱且小",
+        note_cover: "/images/imageMogr4.png",
+    }, {
         id: 1,
         title: "大家有没有烧钱且小众的爱好😱",
         note_cover: "/images/imageMogr1.png",
@@ -205,6 +234,7 @@ const groupedItems = computed(() => {
 .header {
     display: flex;
     align-items: center;
+    background: #fff;
     /* border-bottom: 1px solid var(--el-menu-border-color); */
 }
 
@@ -282,4 +312,5 @@ const groupedItems = computed(() => {
     font-size: 14px;
     margin-bottom: 10px;
 }
+
 </style>

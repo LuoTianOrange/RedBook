@@ -16,14 +16,15 @@
                             <div>发现</div>
                         </div>
                     </router-link>
-                    <div class="menu-item" @click="ChangeColor(2)" :class="{ 'isSelect': selected === 2 }">
+                    <router-link :to="{ name: 'Publish' }" class="menu-item" @click="ChangeColor(2)"
+                        :class="{ 'isSelect': selected === 2 }">
                         <div class="menu-item-box">
                             <el-icon style="margin-right: 15px;">
                                 <Plus />
                             </el-icon>
                             <div>发布</div>
                         </div>
-                    </div>
+                    </router-link>
                     <router-link :to="{ name: 'Notice' }" class="menu-item" @click="ChangeColor(3)"
                         :class="{ 'isSelect': selected === 3 }">
                         <div class="menu-item-box">
@@ -56,7 +57,11 @@
                     </div>
                 </el-aside>
                 <el-container>
+                    <!--头部导航栏-->
                     <el-header class="header">
+                        <div class="header-logo-small">
+                            <img style="width: 80px;" src="/images/小红书logo.png" />
+                        </div>
                         <div style="flex-grow: 1;"></div>
                         <el-input v-model="searchbox" style="width: 500px;height: 40px;" size="large"
                             placeholder="搜索小红书" :suffix-icon="Search" />
@@ -124,13 +129,26 @@
                     </div>
                 </el-dialog>
             </el-container>
+
+            <!--底部菜单-->
+            <div class="menu-bottom">
+                <router-link :to="{ name: i.router }" v-for="i in MenuBottom" :key="i.id" class="menu-bottom-item"
+                    @click="CheckLogin(i)">
+                    <el-icon :size="20" color="#606266" class="menu-bottom-icon">
+                        <component :is="i.icon" />
+                    </el-icon>
+                    <div class="menu-bottom-text">
+                        {{ i.name }}
+                    </div>
+                </router-link>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
 import { computed, ref, reactive } from 'vue'
-import { Search } from '@element-plus/icons-vue'
+import { Search, House } from '@element-plus/icons-vue'
 
 let imgsrc = new URL(`../../assets/images/${name}.png`, import.meta.url).href
 const searchbox = ref('')
@@ -140,118 +158,47 @@ const selected = ref(1)
 const ChangeColor = (index) => {
     selected.value = index
 }
-
-const item_group = ref([
+//底部导航栏按钮设置
+const MenuBottom = [
     {
-        id: 1,
-        title: "大家有没有烧钱且小众的爱好😱",
-        note_cover: "/images/imageMogr1.png",
+        "id": 1,
+        "name": "发现",
+        "icon": "House",
+        "loginRequired": false,
+        "router": "Home"
     },
     {
-        id: 2,
-        title: "大家有没有烧钱且小",
-        note_cover: "/images/imageMogr4.png",
+        "id": 2,
+        "name": "发布",
+        "icon": "Plus",
+        "loginRequired": true,
+        "router": "Publish"
     },
     {
-        id: 1,
-        title: "大家有没有烧钱且小众的爱好😱",
-        note_cover: "/images/imageMogr1.png",
+        "id": 3,
+        "name": "通知",
+        "icon": "Bell",
+        "loginRequired": true,
+        "router": "Notice"
     },
     {
-        id: 2,
-        title: "大家有没有烧钱且小",
-        note_cover: "/images/imageMogr4.png",
-    },
-    {
-        id: 1,
-        title: "大家有没有烧钱且小众的爱好😱",
-        note_cover: "/images/imageMogr1.png",
-    },
-    {
-        id: 2,
-        title: "大家有没有烧钱且小",
-        note_cover: "/images/imageMogr4.png",
-    },
-    {
-        id: 1,
-        title: "大家有没有烧钱且小众的爱好😱",
-        note_cover: "/images/imageMogr1.png",
-    },
-    {
-        id: 2,
-        title: "大家有没有烧钱且小",
-        note_cover: "/images/imageMogr4.png",
-    },
-    {
-        id: 1,
-        title: "大家有没有烧钱且小众的爱好😱",
-        note_cover: "/images/imageMogr1.png",
-    },
-    {
-        id: 2,
-        title: "大家有没有烧钱且小",
-        note_cover: "/images/imageMogr4.png",
-    },
-    {
-        id: 1,
-        title: "大家有没有烧钱且小众的爱好😱",
-        note_cover: "/images/imageMogr1.png",
-    },
-    {
-        id: 2,
-        title: "大家有没有烧钱且小",
-        note_cover: "/images/imageMogr4.png",
-    },
-    {
-        id: 1,
-        title: "大家有没有烧钱且小众的爱好😱",
-        note_cover: "/images/imageMogr1.png",
-    },
-    {
-        id: 2,
-        title: "大家有没有烧钱且小",
-        note_cover: "/images/imageMogr4.png",
-    },
-    {
-        id: 1,
-        title: "大家有没有烧钱且小众的爱好😱",
-        note_cover: "/images/imageMogr1.png",
-    },
-    {
-        id: 2,
-        title: "大家有没有烧钱且小",
-        note_cover: "/images/imageMogr4.png",
-    },
-    {
-        id: 1,
-        title: "大家有没有烧钱且小众的爱好😱",
-        note_cover: "/images/imageMogr1.png",
-    },
-    {
-        id: 2,
-        title: "大家有没有烧钱且小",
-        note_cover: "/images/imageMogr4.png",
-    },
-])
-
-const groupedItems = computed(() => {
-    let groups = [];
-
-    // 每组元素数
-    let groupSize = 3;
-
-    if (groups.length % 2 == 0 && groups.length % 3 == 0) {
-        groupSize = 3;
-    } else if (groups.length % 2 == 0 && groups.length % 3 != 0) {
-        groupSize = 2;
+        "id": 4,
+        "name": "我",
+        "icon": "User",
+        "loginRequired": true,
+        "router": "MyInfo"
     }
-    for (let i = 0; i < item_group.value.length; i += groupSize) {
-        groups.push(item_group.value.slice(i, i + groupSize));
-    }
-    return groups;
-})
-
+]
+//初始化登录弹窗
 const LoginVisible = ref(false)
+//检查是否弹窗
+const CheckLogin = (item) => {
+    if (item.loginRequired) {
+        console.log(item.loginRequired);
+        LoginVisible.value = true
+
+    }
+}
 </script>
 
 <style scoped>
@@ -273,11 +220,11 @@ const LoginVisible = ref(false)
 
 /* 菜单*/
 /*屏幕大小检测*/
-/* @media screen and (max-width: 950px) {
+@media screen and (max-width: 950px) {
     .menu {
         display: none;
     }
-} */
+}
 
 @media screen and (min-width: 950px) {
     .menu {
@@ -343,6 +290,7 @@ const LoginVisible = ref(false)
 .header {
     display: flex;
     align-items: center;
+    background: #fff;
     /* border-bottom: 1px solid var(--el-menu-border-color); */
 }
 
@@ -364,29 +312,54 @@ const LoginVisible = ref(false)
     flex-direction: row-reverse !important;
 }
 
+.header-logo-small {
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+@media screen and (max-width: 950px) {
+    .header-logo-small {
+        display: flex;
+        margin-right: 30px;
+    }
+
+}
+
+@media screen and (min-width: 950px) {
+    .header-logo-small {
+        display: none;
+    }
+
+}
+
 /* 登录界面 */
-::v-deep .el-dialog {
+:v-deep(.el-dialog) {
     max-width: 700px !important;
     border-radius: 20px;
 }
 
 @media screen and (min-width: 950px) {
-    ::v-deep .el-dialog {
+    :v-deep(.el-dialog) {
         min-width: 700px !important;
         border-radius: 20px;
     }
 
 
 }
+
 @media screen and (max-width: 950px) {
-    ::v-deep .el-dialog {
+    :v-deep(.el-dialog) {
         min-width: 320px !important;
         border-radius: 20px;
     }
+
     .el-login-left {
         display: none;
     }
-    
+
 }
 
 .el-login {
@@ -464,5 +437,44 @@ const LoginVisible = ref(false)
     font-size: 14px;
     margin-top: 50px;
     cursor: pointer;
+}
+
+/* 底部菜单 */
+.menu-bottom {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 45px;
+    background: #fff;
+    flex-direction: row;
+    align-items: center;
+}
+
+@media screen and (max-width: 950px) {
+    .menu-bottom {
+        display: flex;
+    }
+}
+
+@media screen and (min-width: 950px) {
+    .menu-bottom {
+        display: none;
+    }
+}
+
+.menu-bottom-item {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.menu-bottom-icon {
+    margin-right: 10px;
+}
+
+.menu-bottom-text {
+    font-size: 14px;
+    color: #909399;
 }
 </style>

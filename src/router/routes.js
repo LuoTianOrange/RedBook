@@ -1,3 +1,4 @@
+import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
     {
         path: '/',
@@ -38,6 +39,14 @@ const routes = [
                 name: 'MyInfo',
                 title: '我的',
                 component: () => import('../components/pages/home/MyInfo.vue'),
+                meta: { requiresAuth: true },
+            },
+            {
+                path: 'publish',
+                name: 'Publish',
+                title: '发布',
+                component: () => import('../components/pages/publish/Publish.vue'),
+                meta: { requiresAuth: true },
             }
         ]
     },
