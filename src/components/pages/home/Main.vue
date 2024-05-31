@@ -234,6 +234,7 @@ const CheckLogin = (item) => {
 
 .menu {
     flex-direction: column;
+    z-index: 1;
 }
 
 .menu-item {
