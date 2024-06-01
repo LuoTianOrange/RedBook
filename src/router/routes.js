@@ -41,15 +41,30 @@ const routes = [
                 component: () => import('../components/pages/home/MyInfo.vue'),
                 meta: { requiresAuth: true },
             },
-            {
-                path: 'publish',
-                name: 'Publish',
-                title: '发布',
-                component: () => import('../components/pages/publish/Publish.vue'),
-                meta: { requiresAuth: true },
-            }
         ]
     },
+    {
+        path: '/publish',
+        name: 'Publish',
+        title: '发布',
+        component: () => import('../components/pages/publish/Publish.vue'),
+        meta: { requiresAuth: true },
+        redirect: '/publish/creator',
+        children:[
+            {
+                path: 'creator',
+                name: 'Creator',
+                title: '创作',
+                component: () => import('../components/pages/publish/Creator.vue'),
+            },
+            {
+                path: 'manage',
+                name: 'Manage',
+                title: '管理笔记',
+                component: () => import('../components/pages/publish/Manage.vue'),
+            }
+        ]
+    }
 
 ]
 export default routes

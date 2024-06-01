@@ -2,100 +2,100 @@
     <div>
         <div class="main-container">
             <el-container style="height: 100vh;">
-                <el-aside width="240px" class="menu">
-                    <div
+                <!--头部导航栏-->
+                <el-header class="header">
+                    <div class="header-logo-small">
+                        <img style="width: 80px;" src="/images/小红书logo.png" />
+                    </div>
+                    <div style="flex-grow: 1;"></div>
+                    <el-input v-model="searchbox" style="width: 500px;height: 40px;" size="large" placeholder="搜索小红书"
+                        :suffix-icon="Search" />
+                    <div style="flex-grow: 1;"></div>
+                    <el-menu mode="horizontal" class="el-menu-demo" style="width: 320px;">
+                        <el-sub-menu index="1">
+                            <template #title>创作中心</template>
+                            <el-menu-item index="1-1">创作服务</el-menu-item>
+                            <el-menu-item index="1-2">直播管理</el-menu-item>
+                        </el-sub-menu>
+                        <el-sub-menu index="2">
+                            <template #title>业务合作</template>
+                            <el-menu-item index="2-1">
+                                业务合作
+                            </el-menu-item>
+                            <el-menu-item index="2-2">
+                                专业号
+                            </el-menu-item>
+                            <el-menu-item index="2-3">
+                                推广合作
+                            </el-menu-item>
+                            <el-menu-item index="2-4">
+                                蒲公英
+                            </el-menu-item>
+                            <el-menu-item index="2-5">
+                                商家入驻
+                            </el-menu-item>
+                            <el-menu-item index="2-6">
+                                MCN入驻
+                            </el-menu-item>
+
+                        </el-sub-menu>
+                    </el-menu>
+                </el-header>
+                <el-container>
+                    <el-aside width="240px" class="menu">
+                        <!-- <div
                         style="height: 60px;display: flex;flex-direction: row;justify-content: flex-start;align-items: center;">
                         <img style="width: 80px;margin-left: 30px;" src="/images/小红书logo.png" />
-                    </div>
-                    <router-link :to="{ name: 'Home' }" class="menu-item" @click="ChangeColor(1)"
-                        :class="{ 'isSelect': selected === 1 }">
-                        <div class="menu-item-box">
-                            <el-icon style="margin-right: 15px;">
-                                <House />
-                            </el-icon>
-                            <div>发现</div>
+                    </div> -->
+                        <router-link :to="{ name: 'Home' }" class="menu-item" @click="ChangeColor(1)"
+                            :class="{ 'isSelect': selected === 1 }">
+                            <div class="menu-item-box">
+                                <el-icon style="margin-right: 15px;">
+                                    <House />
+                                </el-icon>
+                                <div>发现</div>
+                            </div>
+                        </router-link>
+                        <router-link :to="{ name: 'Publish' }" class="menu-item" @click="ChangeColor(2)"
+                            :class="{ 'isSelect': selected === 2 }">
+                            <div class="menu-item-box">
+                                <el-icon style="margin-right: 15px;">
+                                    <Plus />
+                                </el-icon>
+                                <div>发布</div>
+                            </div>
+                        </router-link>
+                        <router-link :to="{ name: 'Notice' }" class="menu-item" @click="ChangeColor(3)"
+                            :class="{ 'isSelect': selected === 3 }">
+                            <div class="menu-item-box">
+                                <el-icon style="margin-right: 15px;">
+                                    <Bell />
+                                </el-icon>
+                                <div>通知</div>
+                            </div>
+                        </router-link>
+                        <router-link :to="{ name: 'MyInfo' }" class="menu-item" @click="ChangeColor(4)"
+                            :class="{ 'isSelect': selected === 4 }">
+                            <div class="menu-item-box">
+                                <div style="margin-right: 15px;">🦆</div>
+                                <div>我</div>
+                            </div>
+                        </router-link>
+                        <div class="menu-item-login" @click="LoginVisible = true">
+                            <div class="menu-item-box" style="margin: 0 auto;">
+                                <div>登录</div>
+                            </div>
                         </div>
-                    </router-link>
-                    <router-link :to="{ name: 'Publish' }" class="menu-item" @click="ChangeColor(2)"
-                        :class="{ 'isSelect': selected === 2 }">
-                        <div class="menu-item-box">
-                            <el-icon style="margin-right: 15px;">
-                                <Plus />
-                            </el-icon>
-                            <div>发布</div>
+                        <div style="margin-top: auto;"></div>
+                        <div class="menu-item" @click="ChangeColor(5)" :class="{ 'isSelect': selected === 5 }">
+                            <div class="menu-item-box">
+                                <el-icon style="margin-right: 15px;">
+                                    <MoreFilled />
+                                </el-icon>
+                                <div>更多</div>
+                            </div>
                         </div>
-                    </router-link>
-                    <router-link :to="{ name: 'Notice' }" class="menu-item" @click="ChangeColor(3)"
-                        :class="{ 'isSelect': selected === 3 }">
-                        <div class="menu-item-box">
-                            <el-icon style="margin-right: 15px;">
-                                <Bell />
-                            </el-icon>
-                            <div>通知</div>
-                        </div>
-                    </router-link>
-                    <router-link :to="{ name: 'MyInfo' }" class="menu-item" @click="ChangeColor(4)"
-                        :class="{ 'isSelect': selected === 4 }">
-                        <div class="menu-item-box">
-                            <div style="margin-right: 15px;">🦆</div>
-                            <div>我</div>
-                        </div>
-                    </router-link>
-                    <div class="menu-item-login" @click="LoginVisible = true">
-                        <div class="menu-item-box" style="margin: 0 auto;">
-                            <div>登录</div>
-                        </div>
-                    </div>
-                    <div style="margin-top: auto;"></div>
-                    <div class="menu-item" @click="ChangeColor(5)" :class="{ 'isSelect': selected === 5 }">
-                        <div class="menu-item-box">
-                            <el-icon style="margin-right: 15px;">
-                                <MoreFilled />
-                            </el-icon>
-                            <div>更多</div>
-                        </div>
-                    </div>
-                </el-aside>
-                <el-container>
-                    <!--头部导航栏-->
-                    <el-header class="header">
-                        <div class="header-logo-small">
-                            <img style="width: 80px;" src="/images/小红书logo.png" />
-                        </div>
-                        <div style="flex-grow: 1;"></div>
-                        <el-input v-model="searchbox" style="width: 500px;height: 40px;" size="large"
-                            placeholder="搜索小红书" :suffix-icon="Search" />
-                        <div style="flex-grow: 1;"></div>
-                        <el-menu mode="horizontal" class="el-menu-demo" style="width: 320px;">
-                            <el-sub-menu index="1">
-                                <template #title>创作中心</template>
-                                <el-menu-item index="1-1">创作服务</el-menu-item>
-                                <el-menu-item index="1-2">直播管理</el-menu-item>
-                            </el-sub-menu>
-                            <el-sub-menu index="2">
-                                <template #title>业务合作</template>
-                                <el-menu-item index="2-1">
-                                    业务合作
-                                </el-menu-item>
-                                <el-menu-item index="2-2">
-                                    专业号
-                                </el-menu-item>
-                                <el-menu-item index="2-3">
-                                    推广合作
-                                </el-menu-item>
-                                <el-menu-item index="2-4">
-                                    蒲公英
-                                </el-menu-item>
-                                <el-menu-item index="2-5">
-                                    商家入驻
-                                </el-menu-item>
-                                <el-menu-item index="2-6">
-                                    MCN入驻
-                                </el-menu-item>
-
-                            </el-sub-menu>
-                        </el-menu>
-                    </el-header>
+                    </el-aside>
                     <router-view></router-view>
                 </el-container>
 
@@ -319,9 +319,10 @@ const CheckLogin = (item) => {
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    margin-right: 30px;
 }
 
-@media screen and (max-width: 950px) {
+/* @media screen and (max-width: 950px) {
     .header-logo-small {
         display: flex;
         margin-right: 30px;
@@ -334,7 +335,7 @@ const CheckLogin = (item) => {
         display: none;
     }
 
-}
+} */
 
 /* 登录界面 */
 :v-deep(.el-dialog) {

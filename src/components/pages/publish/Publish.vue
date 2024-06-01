@@ -1,38 +1,62 @@
 <template>
-  <div class="publish-flex">
-    <div class="publish-main">
-      <div style="height: 100%;padding:0 30px;max-width: calc(100% - 60px);width: 100%;">
-        <div class="publish-header-title">发布图文</div>
-        <div class="photo-upload">
-          <div class="photo-upload-title">图片编辑</div>
-          <el-upload v-model:file-list="pictureList"
-            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" list-type="picture-card"
-            :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
-            <el-icon>
-              <Plus />
-            </el-icon>
-          </el-upload>
-          <el-dialog v-model="dialogVisible">
-            <img w-full :src="dialogImageUrl" alt="预览图片" />
-          </el-dialog>
+  <div class="main-container">
+    <el-container style="height: 100vh;">
+      <!--头部导航栏-->
+      <el-header class="header">
+        <div class="header-logo-small">
+          <img style="width: 80px;" src="/images/小红书logo.png" />
         </div>
-        <div class="info-input">
-          <el-input class="input" v-model="title" maxlength="20" show-word-limit
-            placeholder="填写标题，可能会有更多赞哦～"></el-input>
-          <el-input class="input" v-model="content" maxlength="1000" show-word-limit placeholder="填写更全面的描述信息，让更多的人看到你吧！"
-            :autosize="{ minRows: 2, maxRows: 4 }" warp="soft" type="textarea"></el-input>
-          <div>
-            <el-select class="input" style="width: 200px;">
-              <el-option v-for="i in topicStore" :key="i.id" :label="i.topic" :value="i.topic"></el-option>
-            </el-select>
-          </div>
-          <div style="margin-top: 40px;">
-            <el-button class="commit-btn">发布</el-button>
-            <el-button style="width: 80px!important;">取消</el-button>
-          </div>
-        </div>
-      </div>
-    </div>
+        <div style="flex-grow: 1;"></div>
+        <el-menu mode="horizontal" class="el-menu-demo" style="width: 320px;">
+          <el-sub-menu index="1">
+            <template #title>创作中心</template>
+            <el-menu-item index="1-1">创作服务</el-menu-item>
+            <el-menu-item index="1-2">直播管理</el-menu-item>
+          </el-sub-menu>
+          <el-sub-menu index="2">
+            <template #title>业务合作</template>
+            <el-menu-item index="2-1">
+              业务合作
+            </el-menu-item>
+            <el-menu-item index="2-2">
+              专业号
+            </el-menu-item>
+            <el-menu-item index="2-3">
+              推广合作
+            </el-menu-item>
+            <el-menu-item index="2-4">
+              蒲公英
+            </el-menu-item>
+            <el-menu-item index="2-5">
+              商家入驻
+            </el-menu-item>
+            <el-menu-item index="2-6">
+              MCN入驻
+            </el-menu-item>
+
+          </el-sub-menu>
+        </el-menu>
+      </el-header>
+      <el-container>
+        <el-aside width="220px" class="menu">
+          <router-link :to="{ name: 'Creator' }" class="menu-publish-btn">
+            <div class="menu-item-box">
+              <div>发布笔记</div>
+            </div>
+          </router-link>
+          <router-link :to="{ name: i.name }" class="menu-item" @click="ChangePublishMenuColor(index + 1)"
+            :class="{ 'isSelect': selected === index + 1 }" v-for="(i, index) in publishMenu" :key="i.no">
+            <div class="menu-item-box">
+              <el-icon style="margin: 0 15px;" :size="20" color="#3964FF">
+                <component :is="i.icon"></component>
+              </el-icon>
+              <div>{{ i.title }}</div>
+            </div>
+          </router-link>
+        </el-aside>
+        <router-view></router-view>
+      </el-container>
+    </el-container>
   </div>
   <div class="bg">
 
@@ -40,174 +64,98 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
-
-const title = ref('')
-const content = ref('')
-//话题下拉菜单
-const topicStore = [
-  {
-    "id": 1,
-    "topic": "推荐"
-  },
-  {
-    "id": 2,
-    "topic": "美食"
-  },
-  {
-    "id": 3,
-    "topic": "穿搭"
-  },
-  {
-    "id": 4,
-    "topic": "宠物"
-  },
-  {
-    "id": 5,
-    "topic": "游戏"
-  },
-
+import { ref } from 'vue'
+const publishMenu = [{
+  id: 1,
+  title: '管理笔记',
+  icon: 'Edit',
+  name: 'Manage'
+},
 ]
-
-//图片上传
-const pictureList = ref([
-  {
-    name: 'food.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
-  {
-    name: 'imageMogr4',
-    url: '/images/imageMogr4.png',
-  },
-  {
-    name: 'food.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
-  {
-    name: 'imageMogr4',
-    url: '/images/imageMogr4.png',
-  },
-  {
-    name: 'food.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
-  {
-    name: 'imageMogr4.png',
-    url: '/images/imageMogr4.png',
-  },
-  {
-    name: 'food.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
-  {
-    name: 'imageMogr4.png',
-    url: '/images/imageMogr4.png',
-  },])
-
-const dialogImageUrl = ref('')
-const dialogVisible = ref(false)
-
-const handleRemove = (uploadFile, uploadFiles) => {
-  console.log(uploadFile, uploadFiles)
-}
-
-const handlePictureCardPreview = (uploadFile) => {
-  dialogImageUrl.value = uploadFile.url
-  dialogVisible.value = true
+//菜单点中时变背景色
+const selected = ref(1)
+const ChangePublishMenuColor = (index) => {
+  selected.value = index
 }
 </script>
 
 <style scoped>
-.publish-flex {
+/*main */
+.main-container {
+  min-height: 100vh;
+}
+
+.menu {
+  flex-direction: column;
+  z-index: 1;
+}
+
+.menu-publish-btn{
   display: flex;
-  justify-content: flex-start;
   align-items: center;
-  height: 100vh;
-  width: 100%;
-  flex-direction: column;
-  margin-top: 20px;
+  justify-content: center;
+  margin: 5px 10px 5px 10px;
+  padding: 4px 0;
+  cursor: pointer;
+  height: 35px;
+  border-radius: 4px;
+  background-color: #FF2442;
+  color: #fff;
 }
 
-.publish-main {
+.menu-item {
   display: flex;
-  align-items: flex-start;
-  min-height: 400px;
-  max-width: 1000px;
-  width: 100%;
-  background-color: #fff;
-  border-radius: 8px;
-  flex-direction: column;
-  justify-content: flex-start;
-  padding: 30px 0;
+  align-items: center;
+  margin: 5px 10px 5px 10px;
+  padding: 4px 0;
+  cursor: pointer;
+  height: 35px;
+  border-radius: 4px;
+  color: #3964FF;
+  font-size: 15px;
 }
 
-@media screen and (max-width: 950px) {
-  .bg {
-    width: 100%;
-  }
+.menu-item:hover {
+  background-color: #F2F7FF;
 }
 
-@media screen and (min-width: 950px) {
-  .bg {
-    width: calc(100% - 240px);
-  }
+.menu-item-box{
+  display: flex;
+  align-items: center;
 }
 
-.bg {
-  position: absolute;
-  height: 100%;
-  background: #DCDFE6;
-  z-index: -999;
+/*header*/
+.header {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  /* border-bottom: 1px solid var(--el-menu-border-color); */
 }
 
-.info-input {
-  max-width: 800px;
-  margin-top: 30px;
-}
-
-:deep(.el-upload-list--picture-card) {
-  --el-upload-list-picture-card-size: 120px !important;
-}
-
-:deep(.el-upload--picture-card) {
-  --el-upload-picture-card-size: 120px !important;
-}
-
-.publish-header-title {
-  margin-bottom: 20px;
-  font-size: 20px;
-}
-
-.publish-header-title::before {
-  content: '';
-  display: inline-block;
-  width: 5px;
-  height: 20px;
-  background-color: #ff2e4d;
-  margin-right: 2px;
-  top: 3px;
-  position: relative;
-  border-radius: 3px;
-}
-
-.photo-upload-title {
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-
-.input {
-  margin-top: 10px;
-}
-
-:deep(.el-textarea__inner) {
-  resize: none !important;
+.el-menu--horizontal.el-menu {
+  border-bottom: none !important;
   ;
 }
 
-.commit-btn {
-  background-color: #ff2e4d!important;
-  color: white!important;
-  border: none!important;
-  width: 80px!important;
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.header-left-item {
+  margin: 0 15px;
+}
+
+.el-menu--horizontal {
+  flex-direction: row-reverse !important;
+}
+
+.header-logo-small {
+  height: 60px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin-right: 30px;
 }
 </style>
