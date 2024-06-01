@@ -4,9 +4,9 @@
             <el-container style="height: 100vh;">
                 <!--头部导航栏-->
                 <el-header class="header">
-                    <div class="header-logo-small">
+                    <router-link class="header-logo-small" :to="{ name: 'Home' }">
                         <img style="width: 80px;" src="/images/小红书logo.png" />
-                    </div>
+                    </router-link>
                     <div style="flex-grow: 1;"></div>
                     <el-input v-model="searchbox" style="width: 500px;height: 40px;" size="large" placeholder="搜索小红书"
                         :suffix-icon="Search" />
@@ -147,7 +147,7 @@
 </template>
 
 <script setup>
-import { computed, ref, reactive } from 'vue'
+import { computed, ref, reactive, onUnmounted } from 'vue'
 import { Search, House } from '@element-plus/icons-vue'
 
 let imgsrc = new URL(`../../assets/images/${name}.png`, import.meta.url).href
@@ -158,6 +158,8 @@ const selected = ref(1)
 const ChangeColor = (index) => {
     selected.value = index
 }
+
+
 //底部导航栏按钮设置
 const MenuBottom = [
     {
@@ -196,7 +198,6 @@ const CheckLogin = (item) => {
     if (item.loginRequired) {
         console.log(item.loginRequired);
         LoginVisible.value = true
-
     }
 }
 </script>

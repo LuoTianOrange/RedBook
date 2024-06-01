@@ -33,6 +33,7 @@
         </div>
       </div>
     </div>
+    <div class="bg"></div>
   </div>
 </template>
 
@@ -122,7 +123,6 @@ const handlePictureCardPreview = (uploadFile) => {
   height: 100vh;
   width: 100%;
   flex-direction: column;
-  margin-top: 20px;
 }
 
 .publish-main {
@@ -136,25 +136,7 @@ const handlePictureCardPreview = (uploadFile) => {
   flex-direction: column;
   justify-content: flex-start;
   padding: 30px 0;
-}
-
-@media screen and (max-width: 950px) {
-  .bg {
-    width: 100%;
-  }
-}
-
-@media screen and (min-width: 950px) {
-  .bg {
-    width: calc(100% - 240px);
-  }
-}
-
-.bg {
-  position: absolute;
-  height: 100%;
-  background: #DCDFE6;
-  z-index: -999;
+  margin-top: 20px;
 }
 
 .info-input {
@@ -198,7 +180,6 @@ const handlePictureCardPreview = (uploadFile) => {
 
 :deep(.el-textarea__inner) {
   resize: none !important;
-  ;
 }
 
 .commit-btn {
@@ -206,5 +187,14 @@ const handlePictureCardPreview = (uploadFile) => {
   color: white !important;
   border: none !important;
   width: 80px !important;
+}
+/* 背景 */
+
+.bg {
+  position: absolute;
+  height: 100vh;
+  background: #DCDFE6;
+  z-index: -999;
+  width: calc(100% - 220px);
 }
 </style>
