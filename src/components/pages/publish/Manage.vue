@@ -1,7 +1,7 @@
 <template>
   <div class="manage-main">
-    <div style="background-color: #fff;height: 90%;margin: 20px;border-radius: 6px;">
-      <div style="padding:20px;height: 100%;">
+    <div style="background-color: #fff;height: 95%;margin: 20px;border-radius: 6px;">
+      <div style="padding:20px;height: 92%;">
         <div class="manage-title">笔记管理</div>
         <div class="menu-container">
           <!--菜单-->
@@ -36,8 +36,11 @@
               <div></div>
             </div>
           </div>
+          <div v-if="isLastPage" class="note-end">
+            - 没有更多笔记了 -
+          </div>
           <el-pagination class="note-pagin" background layout="prev, pager, next ,jumper" :total="notecount"
-          :page-size="pageSize" @current-change="handleCurrentChange" />
+            :page-size="pageSize" @current-change="handleCurrentChange" />
         </div>
       </div>
     </div>
@@ -46,7 +49,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref , computed } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { Comment, Like, Star } from '@icon-park/vue-next'
 const activeIndex = ref('1')
 
@@ -65,6 +68,21 @@ const noteStore = ref([
     "title": "春",
     "content": "cillum ut",
     "noteCover": "/images/39eb38.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "夏",
+    "content": "cillum ut",
+    "noteCover": "/images/20240415_112933.jpg",
     "type": "ut dolor L",
     "urls": "consequat commodo velit do Excepteur",
     "picture_count": 863963589,
@@ -178,6 +196,15 @@ const displayedNotes = computed(() => {
 const handleCurrentChange = (newPage) => {
   currentPage.value = newPage
 }
+/**
+ * 计算属性，判断当前页是否是最后一页
+ * @returns {Ref<boolean>} 返回一个响应式引用，值是当前页是否是最后一页。
+ 
+ */
+const isLastPage = computed(() => {
+  return currentPage.value * pageSize >= noteStore.value.length
+})
+
 </script>
 
 <style scoped>
@@ -223,7 +250,7 @@ const handleCurrentChange = (newPage) => {
 .note-flex {
   display: flex;
   flex-direction: column;
-  height: 75%;
+  height: 85%;
 }
 
 .note-image {
@@ -236,6 +263,7 @@ const handleCurrentChange = (newPage) => {
   position: relative;
   margin-right: 20px;
 }
+
 /**图片的半透明遮罩 */
 .note-image::after {
   content: "";
@@ -253,6 +281,11 @@ const handleCurrentChange = (newPage) => {
   align-items: flex-start;
   justify-content: flex-start;
   margin-top: 10px;
+  padding: 10px;
+}
+
+.note-item:hover {
+  background-color: #efefef;
 }
 
 .note-pagin {
@@ -264,7 +297,8 @@ const handleCurrentChange = (newPage) => {
 .menu-container {
   position: relative;
 }
-.note-title{
+
+.note-title {
   margin-bottom: 10px;
 }
 
@@ -290,7 +324,13 @@ const handleCurrentChange = (newPage) => {
   color: #999;
 }
 
-.note-number{
+.note-number {
   margin-left: 5px;
+}
+
+.note-end{
+  text-align: center;
+  margin-top: 10px;
+  color: #999;
 }
 </style>
