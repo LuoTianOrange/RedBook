@@ -43,46 +43,46 @@
 
 #### 思维导图
 
-![思维导图](markdown\images\思维导图.png)
+![思维导图](markdown/images/思维导图.png)
 
 #### 首页
 
 ###### 发现
 
-![首页](markdown\images\首页.png)
+![首页](markdown/images/首页.png)
 
 ###### 通知
 
-![通知](markdown\images\通知.png)
+![通知](markdown/images/通知.png)
 
 ###### 我的
 
-![我的](markdown\images\我的.png)
+![我的](markdown/images/我的.png)
 
 ###### 登录
 
-![登录](markdown\images\登录弹窗.png)
+![登录](markdown/images/登录弹窗.png)
 
 ###### 页面小于950px时
 
 首页部分
 
-![首页_950px](markdown\images\首页_950px.png)
+![首页_950px](markdown/images/首页_950px.png)
 
 ------
 
 登录界面
 
-![登录_950px](markdown\images\登录_950px.png)
+![登录_950px](markdown/images/登录_950px.png)
 
 #### 发布页面
 
 ##### 发布笔记
 
-![发布页面](markdown\images\发布页面.png)
+![发布页面](markdown/images/发布页面.png)
 
 ##### 管理笔记
 
-![管理笔记](markdown\images\管理笔记.png)
+![管理笔记](markdown/images/管理笔记.png)
 
-![管理笔记最后一页](markdown\images\管理笔记最后一页.png)
+![管理笔记最后一页](markdown/images/管理笔记最后一页.png)
