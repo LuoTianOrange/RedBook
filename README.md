@@ -1,7 +1,35 @@
-# Vue 3 + Vite
+# 小红书(前端部分)
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+本项目为仿照小红书写的笔记交流网站，仅为前端部分，用于项目实训的课程设计。
 
-## Recommended IDE Setup
+### 目录
 
-- [VS Code](https://code.visualstudio.com/) + [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (previously Volar) and disable Vetur
+- [如何使用](#如何使用)
+  - [本地部署](#本地部署)
+  
+
+- [任务](#任务)
+- [预览](#预览)
+
+## 如何使用
+
+##### 本地部署
+
+首先，电脑上要安装最新版的npm和node环境
+
+1. Fork 并 Clone 代码到本地
+2. 进入项目目录，运行`npm install`安装项目依赖
+3. 安装完成依赖后，运行`npm run dev`即可启动项目，默认在`localhost:5173`端口启动
+4. 如果需要编译项目，运行`npm run build`即可编译项目，编译后会在当前目录下生成`dist`文件夹
+
+## 任务
+- [x] 笔记管理页面高度问题
+
+
+
+## 难点
+
+- 动态路由
+- 路由守卫
+
+## 预览

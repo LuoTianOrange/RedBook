@@ -1,7 +1,7 @@
 <template>
   <div class="manage-main">
-    <div style="background-color: #fff;height: 95%;margin: 20px;border-radius: 6px;">
-      <div style="padding:20px;height: 92%;">
+    <div class="manage-box">
+      <div class="manage-box-padding">
         <div class="manage-title">笔记管理</div>
         <div class="menu-container">
           <!--菜单-->
@@ -212,16 +212,18 @@ const isLastPage = computed(() => {
 
 .bg {
   position: absolute;
-  min-height: 100vh;
-  background: #DCDFE6;
-  z-index: -999;
-  width: calc(100% - 220px);
-  top: 0;
+    height: 100%;
+    background: #DCDFE6;
+    z-index: -999;
+    width: 100%;
+    top: 0;
+    right: 0;
 }
 
 /* main */
 
 .manage-main {
+  position: relative;
   min-height: calc(100vh - 60px);
   min-width: calc(100% - 220px);
 }
@@ -246,11 +248,25 @@ const isLastPage = computed(() => {
   margin: 20px 0;
 }
 
+.manage-box {
+  background-color: #fff;
+  height: 800px;
+  margin: 20px;
+  border-radius: 6px;
+}
+
+.manage-box-padding {
+  padding: 20px;
+  /* height: 92%; */
+  height: calc(100% - 40px);
+}
+
 /**笔记 */
 .note-flex {
   display: flex;
   flex-direction: column;
-  height: 85%;
+  /* height: 85%; */
+  height: calc(100% - 140px);
 }
 
 .note-image {
@@ -289,6 +305,7 @@ const isLastPage = computed(() => {
 }
 
 .note-pagin {
+  /* margin-top: 20px; */
   margin-top: auto;
   display: flex;
   justify-content: center;
@@ -328,7 +345,7 @@ const isLastPage = computed(() => {
   margin-left: 5px;
 }
 
-.note-end{
+.note-end {
   text-align: center;
   margin-top: 10px;
   color: #999;

@@ -11,7 +11,7 @@
             <div style="max-height: calc(100vh - 190px);overflow: auto;">
                 <div class="main-container-flex">
                     <div class="main-container" v-for="list in groupedItems">
-                        <div class="main-item" v-for="info in list">
+                        <router-link :to="{path: 'note/:id'}" class="main-item" v-for="info in list">
                             <div class="main-item-top">
                                 <img style="object-fit: cover;width: 100%;" :src="info.note_cover">
                             </div>
@@ -30,7 +30,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </router-link>
                     </div>
                 </div>
             </div>
@@ -55,7 +55,7 @@ const userLikeNav = [
         no: 2,
         name: '美食'
     }]
-
+//存放笔记的数组
 const item_group = ref([
     {
         id: 1,

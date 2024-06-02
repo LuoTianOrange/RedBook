@@ -41,6 +41,13 @@ const routes = [
                 component: () => import('../components/pages/home/MyInfo.vue'),
                 meta: { requiresAuth: true },
             },
+            {
+                path: 'note/:id', 
+                name: 'Note',
+                title: '笔记详情',
+                component: () => import('../components/pages/explore/Note.vue'),
+                props: true,
+            },
         ]
     },
     {
