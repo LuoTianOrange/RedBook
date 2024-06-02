@@ -11,16 +11,17 @@
             <div style="max-height: calc(100vh - 190px);overflow: auto;">
                 <div class="main-container-flex">
                     <div class="main-container" v-for="list in groupedItems">
-                        <router-link :to="{path: 'note/:id'}" class="main-item" v-for="info in list">
+                        <router-link :to="{ name: 'Note'}" class="main-item"
+                            v-for="info in list">
                             <div class="main-item-top">
-                                <img style="object-fit: cover;width: 100%;" :src="info.note_cover">
+                                <img style="object-fit: cover;width: 100%;" :src="info.noteCover">
                             </div>
                             <div class="main-item-bottom">
                                 <span style="margin-bottom: 8px;">{{ info.title }}</span>
                                 <div style="display: flex;justify-content: space-between;margin-top: 8px;">
                                     <div style="display: flex;align-items: center;">
                                         <img style="margin-right: 5px;border-radius: 50%;width: 25px;height: 25px;overflow: hidden;"
-                                            src="/images/imageMogr2.png" />
+                                            :src="info.avatar" />
                                         <span>杰瑞</span>
                                     </div>
                                     <div style="display: flex;align-items: center;">
@@ -39,8 +40,8 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
-
+import { computed, ref ,onMounted } from 'vue'
+import axios from 'axios'
 //导航点中时变背景色
 const userLikeSel = ref(1)
 const ChangeUserLike = (index) => {
@@ -56,127 +57,457 @@ const userLikeNav = [
         name: '美食'
     }]
 //存放笔记的数组
-const item_group = ref([
-    {
-        id: 1,
-        title: "大家有没有烧钱且小众的爱好😱",
-        note_cover: "/images/imageMogr1.png",
-    },
-    {
-        id: 2,
-        title: "大家有没有烧钱且小",
-        note_cover: "/images/imageMogr4.png",
-    },
-    {
-        id: 1,
-        title: "大家有没有烧钱且小众的爱好😱",
-        note_cover: "/images/imageMogr1.png",
-    },
-    {
-        id: 2,
-        title: "大家有没有烧钱且小",
-        note_cover: "/images/imageMogr4.png",
-    },
-    {
-        id: 1,
-        title: "大家有没有烧钱且小众的爱好😱",
-        note_cover: "/images/imageMogr1.png",
-    },
-    {
-        id: 2,
-        title: "大家有没有烧钱且小",
-        note_cover: "/images/imageMogr4.png",
-    }, {
-        id: 1,
-        title: "大家有没有烧钱且小众的爱好😱",
-        note_cover: "/images/imageMogr1.png",
-    },
-    {
-        id: 2,
-        title: "大家有没有烧钱且小",
-        note_cover: "/images/imageMogr4.png",
-    },
-    {
-        id: 1,
-        title: "大家有没有烧钱且小众的爱好😱",
-        note_cover: "/images/imageMogr1.png",
-    },
-    {
-        id: 2,
-        title: "大家有没有烧钱且小",
-        note_cover: "/images/imageMogr4.png",
-    },
-    {
-        id: 1,
-        title: "大家有没有烧钱且小众的爱好😱",
-        note_cover: "/images/imageMogr1.png",
-    },
-    {
-        id: 2,
-        title: "大家有没有烧钱且小",
-        note_cover: "/images/imageMogr4.png",
-    },
-    {
-        id: 1,
-        title: "大家有没有烧钱且小众的爱好😱",
-        note_cover: "/images/imageMogr1.png",
-    },
-    {
-        id: 2,
-        title: "大家有没有烧钱且小",
-        note_cover: "/images/imageMogr4.png",
-    },
-    {
-        id: 1,
-        title: "大家有没有烧钱且小众的爱好😱",
-        note_cover: "/images/imageMogr1.png",
-    },
-    {
-        id: 2,
-        title: "大家有没有烧钱且小",
-        note_cover: "/images/imageMogr4.png",
-    },
-    {
-        id: 1,
-        title: "大家有没有烧钱且小众的爱好😱",
-        note_cover: "/images/imageMogr1.png",
-    },
-    {
-        id: 2,
-        title: "大家有没有烧钱且小",
-        note_cover: "/images/imageMogr4.png",
-    },
-    {
-        id: 1,
-        title: "大家有没有烧钱且小众的爱好😱",
-        note_cover: "/images/imageMogr1.png",
-    },
-    {
-        id: 2,
-        title: "大家有没有烧钱且小",
-        note_cover: "/images/imageMogr4.png",
-    },
-    {
-        id: 1,
-        title: "大家有没有烧钱且小众的爱好😱",
-        note_cover: "/images/imageMogr1.png",
-    },
-    {
-        id: 2,
-        title: "大家有没有烧钱且小",
-        note_cover: "/images/imageMogr4.png",
-    },
-    {
-        id: 1,
-        title: "大家有没有烧钱且小众的爱好😱",
-        note_cover: "/images/imageMogr1.png",
-    },
-    {
-        id: 2,
-        title: "大家有没有烧钱且小",
-        note_cover: "/images/imageMogr4.png",
-    },
+const noteStore = ref([
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "春",
+    "content": "cillum ut",
+    "noteCover": "/images/39eb38.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "夏",
+    "content": "cillum ut",
+    "noteCover": "/images/20240415_112933.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "夏",
+    "content": "cillum ut",
+    "noteCover": "/images/20240415_112933.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "Miku",
+    "content": "cillum ut",
+    "noteCover": "/images/20240312_192636.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "Miku",
+    "content": "cillum ut",
+    "noteCover": "/images/20240312_192636.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "Miku",
+    "content": "cillum ut",
+    "noteCover": "/images/20240312_192636.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "夏",
+    "content": "cillum ut",
+    "noteCover": "/images/20240415_112933.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "春",
+    "content": "cillum ut",
+    "noteCover": "/images/39eb38.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "夏",
+    "content": "cillum ut",
+    "noteCover": "/images/20240415_112933.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "夏",
+    "content": "cillum ut",
+    "noteCover": "/images/20240415_112933.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "Miku",
+    "content": "cillum ut",
+    "noteCover": "/images/20240312_192636.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "Miku",
+    "content": "cillum ut",
+    "noteCover": "/images/20240312_192636.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "Miku",
+    "content": "cillum ut",
+    "noteCover": "/images/20240312_192636.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "夏",
+    "content": "cillum ut",
+    "noteCover": "/images/20240415_112933.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "春",
+    "content": "cillum ut",
+    "noteCover": "/images/39eb38.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "夏",
+    "content": "cillum ut",
+    "noteCover": "/images/20240415_112933.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "夏",
+    "content": "cillum ut",
+    "noteCover": "/images/20240415_112933.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "Miku",
+    "content": "cillum ut",
+    "noteCover": "/images/20240312_192636.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "Miku",
+    "content": "cillum ut",
+    "noteCover": "/images/20240312_192636.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "Miku",
+    "content": "cillum ut",
+    "noteCover": "/images/20240312_192636.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "夏",
+    "content": "cillum ut",
+    "noteCover": "/images/20240415_112933.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "春",
+    "content": "cillum ut",
+    "noteCover": "/images/39eb38.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "夏",
+    "content": "cillum ut",
+    "noteCover": "/images/20240415_112933.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "夏",
+    "content": "cillum ut",
+    "noteCover": "/images/20240415_112933.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "Miku",
+    "content": "cillum ut",
+    "noteCover": "/images/20240312_192636.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "Miku",
+    "content": "cillum ut",
+    "noteCover": "/images/20240312_192636.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "Miku",
+    "content": "cillum ut",
+    "noteCover": "/images/20240312_192636.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
+  {
+    "id": 2046975644,
+    "user_id": 906190192,
+    "title": "夏",
+    "content": "cillum ut",
+    "noteCover": "/images/20240415_112933.jpg",
+    "type": "ut dolor L",
+    "urls": "consequat commodo velit do Excepteur",
+    "picture_count": 863963589,
+    "like_count": -1953051395,
+    "like_status": true,
+    "collection_status": true,
+    "collection_count": 1130386215,
+    "comment_count": 673008498,
+    "avatar": "/images/userheader.png"
+  },
 ])
+
 
 const groupedItems = computed(() => {
     let groups = [];
@@ -189,13 +520,21 @@ const groupedItems = computed(() => {
     } else if (groups.length % 2 == 0 && groups.length % 3 != 0) {
         groupSize = 2;
     }
-    for (let i = 0; i < item_group.value.length; i += groupSize) {
-        groups.push(item_group.value.slice(i, i + groupSize));
+    for (let i = 0; i < noteStore.value.length; i += groupSize) {
+        groups.push(noteStore.value.slice(i, i + groupSize));
     }
     return groups;
 })
 
-
+onMounted(async () => {
+    try {
+        const response = await axios.get('http://localhost:8080/note/notes')
+        noteStore.value = response.data
+        console.log(response.data);
+    } catch (error) {
+        console.error(error)
+    }
+})
 </script>
 
 <style scoped>
@@ -312,5 +651,4 @@ const groupedItems = computed(() => {
     font-size: 14px;
     margin-bottom: 10px;
 }
-
 </style>

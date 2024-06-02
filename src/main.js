@@ -8,11 +8,10 @@ import {install} from '@icon-park/vue-next/es/all';
 import '@icon-park/vue-next/styles/index.css';
 import router from './router/index'
 import pinia from './stores'
+import axios from 'axios'
 
 const app = createApp(App)
-app.use(ElementPlus)
-app.use(router)
-app.use(pinia)
+app.use(ElementPlus).use(router).use(pinia).use(axios)
 
 install(app, 'i')
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
