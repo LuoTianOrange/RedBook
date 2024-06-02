@@ -11,11 +11,11 @@
             <div style="max-height: calc(100vh - 190px);overflow: auto;">
                 <div class="main-container-flex">
                     <div class="main-container" v-for="list in groupedItems">
-                        <router-link :to="{ name: 'Note'}" class="main-item"
+                        <div class="main-item"
                             v-for="info in list">
-                            <div class="main-item-top">
+                            <router-link :to="{ name: 'Note'}" class="main-item-top">
                                 <img style="object-fit: cover;width: 100%;" :src="info.noteCover">
-                            </div>
+                            </router-link>
                             <div class="main-item-bottom">
                                 <span style="margin-bottom: 8px;">{{ info.title }}</span>
                                 <div style="display: flex;justify-content: space-between;margin-top: 8px;">
@@ -31,7 +31,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </router-link>
+                          </div>
                     </div>
                 </div>
             </div>
