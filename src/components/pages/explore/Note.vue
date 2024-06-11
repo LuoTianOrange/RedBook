@@ -1,27 +1,92 @@
 <template>
-    <div class="note-flex">
-        <div class="note-main">
-            <div class="note-image" :style="{backgroundImage:`url(${noteCover})`}"></div>
-            <div class="note-main">
-                <div class="note-userinfo">
-                    <div class="note-useravater"></div>
-                    <div class="note-username"></div>
-                </div>
-                <div class="note-title"></div>
-                <div class="note-content"></div>
-                <div class="note-date"></div>
+    <div class="note-flex" v-if="!isLoading">
+        <div class="note-main" v-for="i in tempStore">
+            <div class="note-left">
+                <!-- <div class="note-image" :style="{ backgroundImage: `url(${i.noteCover})` }"></div> -->
+                <el-image class="note-image" :src="i.noteCover" :zoom-rate="1.2" :max-scale="7" :min-scale="0.2"
+                    :preview-src-list="srcList" :initial-index="1" fit="contain" />
             </div>
-            <div class="comments">
-                <div>共{{ 1 }}条评论</div>
-                <div class="comment-item">
-                    <div class="comment-avater"></div>
-                    <div class="comment-userinfo">
-                        <div class="comment-username"></div>
-                        <div class="comment-content"></div>
-                        <div class="comment-date"></div>
-                        <div class="comment-interactions">
-                            <div class="like"></div>
-                            <div class="collection"></div>
+            <div class="note-right">
+                <div class="note-right-main">
+                    <div class="note-userinfo">
+                        <img class="note-useravater" :src="i.avatar" />
+                        <div class="note-username">{{ i.username }}</div>
+                    </div>
+                    <div class="note-title">{{ i.title }}</div>
+                    <div class="note-content">{{ i.content }}</div>
+                    <div class="note-date">{{ i.update_date }}</div>
+                </div>
+                <div style="margin-left: 15px;margin-bottom: 5px;">共{{ commentStorelenth }}条评论</div>
+                <div class="comments">
+                    <!-- <div class="comment-item" v-for="i in comment" :key="i.id">
+                        <img class="comment-avater" :src="i.avatar" />
+                        <div class="comment-userinfo">
+                            <div class="comment-username">{{ i.username }}</div>
+                            <div class="comment-content">{{ i.content }}</div>
+                            <div class="comment-date">{{ i.create_date }}</div>
+                            <div class="comment-interactions">
+                                <div class="like">
+                                    <i-like style="margin-right: 5px;" theme="outline" size="16" fill="#333" />
+                                    {{ i.like_count }}
+                                </div>
+                                <div class="collection">
+                                    <i-star style="margin-right: 5px;" theme="outline" size="16" fill="#333" />
+                                    {{ i.comment_twocount }}
+                                </div>
+                            </div> -->
+                    <!--回复-->
+                    <!-- <div class="comment-reply" v-for="k in group2" :key="k.id" >
+                                <img class="comment-avater" :src="k.avatar" style="width: 30px;height: 30px;" />
+                                <div class="comment-userinfo">
+                                    <div class="comment-username">{{ k.username }}</div>
+                                    <div class="comment-content">{{ i.content }}</div>
+                                    <div class="comment-date">{{ k.create_date }}</div>
+                                    <div class="comment-interactions rl-center">
+                                        <div class="like">
+                                            <i-like style="margin-right: 5px;" theme="outline" size="16" fill="#333" />
+                                            {{ k.like_count }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                    <div v-for="i in CSData" :key="i.index" class="comment-item">
+                        <div>
+                            <img class="comment-avater" :src="i.comment.avatar" />
+                            <div class="comment-userinfo">
+                                <div class="comment-username">{{ i.comment.username }}</div>
+                                <div class="comment-content">{{ i.comment.content }}</div>
+                                <div class="comment-date">{{ i.comment.create_date }}</div>
+                                <div class="comment-interactions">
+                                    <div class="like">
+                                        <i-like style="margin-right: 5px;" theme="outline" size="16" fill="#333" />
+                                        {{ i.comment.like_count }}
+                                    </div>
+                                    <div class="collection">
+                                        <i-star style="margin-right: 5px;" theme="outline" size="16" fill="#333" />
+                                        {{ i.comment.comment_twocount }}
+                                    </div>
+                                </div>
+                                <!--回复-->
+                                <div class="reply-item">
+                                    <div v-for=" (k, index) in i.sub_reply" :key="index"
+                                        class="comment-reply">
+                                        <img class="comment-avater" :src="k.avatar" style="width: 30px;height: 30px;" />
+                                        <div class="comment-userinfo">
+                                            <div class="comment-username">{{ k.username }}</div>
+                                            <div class="comment-content">{{ k.content }}</div>
+                                            <div class="comment-date">{{ k.create_date }}</div>
+                                            <div class="comment-interactions rl-center">
+                                                <div class="like">
+                                                    <i-like style="margin-right: 5px;" theme="outline" size="16"
+                                                        fill="#333" />
+                                                    {{ k.like_count }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -31,44 +96,295 @@
 </template>
 
 <script setup>
-import { ref,onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useNoteStore } from '../../../stores/store'
 import { storeToRefs } from 'pinia'
 const noteStore = useNoteStore()
-const info = ref(null)
+const tempStore = ref([{
+    "id": -458280468,
+    "user_id": -165623116,
+    "title": "我是标题",
+    "content": "文字是人类用符号记录表达信息以传之久远的方式和工具。现代文字大多是记录语言的工具。人类往往先有口头的语言后产生书面文字，很多小语种，有语言但没有文字。文字的不同体现了国家和民族的书面表达的方式和思维不同。文字使人类进入有历史记录的文明社会。",
+    "noteCover": "/images/20231029_124802_waifu2x_2x_2n_jpg.png",
+    "type": "id ea tempor reprehenderit do",
+    "urls": "Excepteur laborum enim dolore",
+    "picture_count": -253759575,
+    "like_count": 587561824,
+    "like_status": false,
+    "collection_status": true,
+    "collection_count": -1308163117,
+    "comment_count": -401467102,
+    "update_date": "2021-09-29",
+    "avatar": "/images/userheader.png",
+    "username": "小红薯664D4ED4"
+},])
+const commentStore = ref([
+    {
+        "id": 1,
+        "note_id": -1809236680,
+        "note_uid": -1201130460,
+        "user_id": -1001762608,
+        "reply_uid": 0,
+        "reply_id": 0,
+        "content": "一大段文字，文字是人类用符号记录表达信息以传之久远的方式和工具。现代文字大多是记录语言的工具。",
+        "comment_twocount": 4,
+        "like_count": 3,
+        "create_date": "2021-09-29",
+        "avatar": "/images/userheader.png",
+        "username": "小红薯664D4ED4"
+    },
+    {
+        "id": 2,
+        "note_id": -1809236680,
+        "note_uid": -1201130460,
+        "user_id": -1001762608,
+        "reply_uid": -1409893201,
+        "reply_id": 1,
+        "content": "一大段文字",
+        "comment_twocount": 2,
+        "like_count": 5,
+        "create_date": "2021-09-29",
+        "avatar": "https://ss0.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=257340989,3686561450&fm=253&gp=0.jpg",
+        "username": "小红薯35336663"
+    },
+    {
+        "id": 3,
+        "note_id": -1809236680,
+        "note_uid": -1201130460,
+        "user_id": -1001762608,
+        "reply_uid": -1409893201,
+        "reply_id": 1,
+        "content": "一大段文字",
+        "comment_twocount": 5,
+        "like_count": 4,
+        "create_date": "2021-09-29",
+        "username": "小红薯657556888",
+        "avatar": "/images/userheader.png",
+    },
+    {
+        "id": 4,
+        "note_id": -1809236680,
+        "note_uid": -1201130460,
+        "user_id": -1001762608,
+        "reply_uid": 0,
+        "reply_id": 0,
+        "content": "一大段文字2，文字是人类用符号记录表达信息以传之久远的方式和工具。现代文字大多是记录语言的工具。",
+        "comment_twocount": 4,
+        "like_count": 3,
+        "create_date": "2021-09-29",
+        "avatar": "/images/userheader.png",
+        "username": "小红薯664D4ED4"
+    },
+    {
+        "id": 5,
+        "note_id": -1809236680,
+        "note_uid": -1201130460,
+        "user_id": -1001762608,
+        "reply_uid": -1409893201,
+        "reply_id": 4,
+        "content": "一大段文字3",
+        "comment_twocount": 2,
+        "like_count": 5,
+        "create_date": "2021-09-29",
+        "avatar": "https://ss0.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=257340989,3686561450&fm=253&gp=0.jpg",
+        "username": "小红薯35336663"
+    },
+    {
+        "id": 6,
+        "note_id": -1809236680,
+        "note_uid": -1201130460,
+        "user_id": -1001762608,
+        "reply_uid": -1409893201,
+        "reply_id": 4,
+        "content": "一大段文字3",
+        "comment_twocount": 5,
+        "like_count": 4,
+        "create_date": "2021-09-29",
+        "username": "小红薯657556888",
+        "avatar": "/images/userheader.png",
+    }
+])
+
+let commentStorelenth = ref(0)
+//图片预览
+const srcList = ref([])
+srcList.value.push(tempStore.value[0].noteCover)
+
+let info = ref(null)
+let isLoading = ref(true)
+
+let CSData = ref([])
+
 onMounted(() => {
-    console.log(noteStore.noteData)
+    console.log("temp:", tempStore.value);
+    console.log("noteStore.noteData:", noteStore.noteData)
     info.value = storeToRefs(noteStore.noteData)
-    console.log(info);
+    isLoading.value = false
+    console.log("info.value:", info.value);
+    commentStorelenth.value = commentStore.value.length
+
+    CSData.value = commentStore.value.map(item => {
+        if (item.reply_id <= 0) {
+            return {
+                comment: item,
+                sub_reply: commentStore.value.filter(subItem => subItem.reply_id === item.id)
+            };
+        }
+    }).filter(item => item !== undefined);
+    console.log("CSData:", CSData.value);
 })
+
+
+
 </script>
 
 <style scoped>
 /**笔记 */
-@media screen and (max-width: 950px){
-    
+@media screen and (max-width: 950px) {
+    .note-main {}
 }
-@media screen and (min-width: 950px){
-    
+
+@media screen and (min-width: 950px) {
+    .note-main {
+        max-height: calc(100vh - 100px);
+    }
 }
-.note-flex{
+
+.note-flex {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
 }
-.note-main{
+
+.note-main {
     max-width: 1728px;
     min-width: 320px;
-    margin: 0 auto;
+    height: 100%;
+    margin: auto;
+    display: flex;
+    padding: 0 30px;
+
+}
+
+.note-left {
+    max-width: 1000px;
+    border-radius: 12px 0 0 12px;
+    overflow: hidden;
+    background: #f7f7f7;
+    padding: 30px 0;
+    border: 1px solid #ebebeb;
+}
+
+.note-right {
+    min-width: 300px;
+    max-width: 420px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0 12px 12px 0;
+    border: 1px;
+    border-style: solid solid solid none;
+    border-color: #ebebeb;
+}
+
+.note-right-main {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+}
+
+.note-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    position: relative;
+}
+
+.note-useravater,
+.comment-avater {
+    height: 50px;
+    width: 50px;
+    border: 1px solid #ebebeb;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.note-userinfo,
+.comment-userinfo {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.note-username,
+.comment-username {}
+
+.note-title {
+    margin-top: 20px;
+    font-weight: bolder;
+}
+
+.note-content {
+    margin-top: 10px;
+}
+
+.note-date,
+.comment-date {
+    padding: 10px 0;
+    color: #999;
+    font-size: 14px;
+    border-bottom: 1px solid #ebebeb;
 }
 
 /**评论 */
-@media screen and (max-width: 950px){
-    
-}
-@media screen and (min-width: 950px){
-    
+@media screen and (max-width: 950px) {
+    .note-flex {
+        height: calc(100vh - 110px);
+    }
 }
 
+@media screen and (min-width: 950px) {}
+
+.comments {
+    margin: 15px;
+    overflow: overlay;
+}
+
+.comment-item,
+.comment-reply {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+}
+
+.comment-userinfo {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    margin-left: 10px;
+}
+
+.comment-date {
+    border-bottom: none !important;
+}
+
+.like,
+.collection {
+    font-size: 16px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.comment-interactions {
+    display: flex;
+}
+
+.reply-item {
+    display: flex;
+    flex-direction: column;
+}
 </style>

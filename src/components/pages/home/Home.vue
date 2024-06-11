@@ -12,9 +12,8 @@
         <div class="main-container-flex">
           <div class="main-container" v-for="list in groupedItems">
             <div class="main-item" v-for="info in list" :key="info.id" v-if="!isLoading">
-              <div @click="goToNote(info.note)" class="main-item-top">
-                <img style="object-fit: cover;width: 100%;" :src="info.note.noteCover">
-              </div>
+              <img style="object-fit: cover;width: 100%;" :src="info.note.noteCover" @click="goToNote(info.note)"
+                class="main-item-top">
               <div class="main-item-bottom">
                 <span style="margin-bottom: 8px;">{{ info.note.title }}</span>
                 <div style="display: flex;justify-content: space-between;margin-top: 8px;">
@@ -103,10 +102,6 @@ const goToNote = (noteData) => {
 </script>
 
 <style scoped>
-/*滚动条隐藏*/
-::-webkit-scrollbar {
-  display: none;
-}
 
 /*Main*/
 .el-main-css {

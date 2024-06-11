@@ -48,6 +48,12 @@ const routes = [
                 component: () => import('../components/pages/explore/Note.vue'),
                 props: true,
             },
+            {
+                path: 'register',
+                name: 'Register',
+                title: '注册',
+                component: () => import('../components/pages/home/Register.vue'),
+            }
         ]
     },
     {
