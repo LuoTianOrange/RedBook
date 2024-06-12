@@ -18,40 +18,8 @@
                 </div>
                 <div style="margin-left: 15px;margin-bottom: 5px;">共{{ commentStorelenth }}条评论</div>
                 <div class="comments">
-                    <!-- <div class="comment-item" v-for="i in comment" :key="i.id">
-                        <img class="comment-avater" :src="i.avatar" />
-                        <div class="comment-userinfo">
-                            <div class="comment-username">{{ i.username }}</div>
-                            <div class="comment-content">{{ i.content }}</div>
-                            <div class="comment-date">{{ i.create_date }}</div>
-                            <div class="comment-interactions">
-                                <div class="like">
-                                    <i-like style="margin-right: 5px;" theme="outline" size="16" fill="#333" />
-                                    {{ i.like_count }}
-                                </div>
-                                <div class="collection">
-                                    <i-star style="margin-right: 5px;" theme="outline" size="16" fill="#333" />
-                                    {{ i.comment_twocount }}
-                                </div>
-                            </div> -->
-                    <!--回复-->
-                    <!-- <div class="comment-reply" v-for="k in group2" :key="k.id" >
-                                <img class="comment-avater" :src="k.avatar" style="width: 30px;height: 30px;" />
-                                <div class="comment-userinfo">
-                                    <div class="comment-username">{{ k.username }}</div>
-                                    <div class="comment-content">{{ i.content }}</div>
-                                    <div class="comment-date">{{ k.create_date }}</div>
-                                    <div class="comment-interactions rl-center">
-                                        <div class="like">
-                                            <i-like style="margin-right: 5px;" theme="outline" size="16" fill="#333" />
-                                            {{ k.like_count }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
                     <div v-for="i in CSData" :key="i.index" class="comment-item">
-                        <div>
+                        <div style="display: flex;">
                             <img class="comment-avater" :src="i.comment.avatar" />
                             <div class="comment-userinfo">
                                 <div class="comment-username">{{ i.comment.username }}</div>
@@ -63,14 +31,13 @@
                                         {{ i.comment.like_count }}
                                     </div>
                                     <div class="collection">
-                                        <i-star style="margin-right: 5px;" theme="outline" size="16" fill="#333" />
+                                        <i-comment style="margin-right: 5px;" theme="outline" size="16" fill="#333" />
                                         {{ i.comment.comment_twocount }}
                                     </div>
                                 </div>
                                 <!--回复-->
                                 <div class="reply-item">
-                                    <div v-for=" (k, index) in i.sub_reply" :key="index"
-                                        class="comment-reply">
+                                    <div v-for=" (k, index) in i.sub_reply" :key="index" class="comment-reply">
                                         <img class="comment-avater" :src="k.avatar" style="width: 30px;height: 30px;" />
                                         <div class="comment-userinfo">
                                             <div class="comment-username">{{ k.username }}</div>
@@ -80,7 +47,12 @@
                                                 <div class="like">
                                                     <i-like style="margin-right: 5px;" theme="outline" size="16"
                                                         fill="#333" />
-                                                    {{ k.like_count }}
+                                                    <div>{{ k.like_count }}</div>
+                                                </div>
+                                                <div class="collection">
+                                                    <i-comment style="margin-right: 5px;" theme="outline" size="16"
+                                                        fill="#333" />
+                                                    <div>回复</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -88,6 +60,13 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="replybox">
+                    <el-input v-model="replyinput"></el-input>
+                    <div style="display: flex;flex-direction: row-reverse;margin-top: 10px;">
+                        <el-button @click="replyinput = ''" round class="button">取消</el-button>
+                        <el-button :disabled="!replyinput" type="primary" :icon="Edit" round>发送</el-button>
                     </div>
                 </div>
             </div>
@@ -99,6 +78,7 @@
 import { ref, onMounted, computed } from 'vue';
 import { useNoteStore } from '../../../stores/store'
 import { storeToRefs } from 'pinia'
+import axios from 'axios'
 const noteStore = useNoteStore()
 const tempStore = ref([{
     "id": -458280468,
@@ -127,7 +107,7 @@ const commentStore = ref([
         "reply_uid": 0,
         "reply_id": 0,
         "content": "一大段文字，文字是人类用符号记录表达信息以传之久远的方式和工具。现代文字大多是记录语言的工具。",
-        "comment_twocount": 4,
+        "comment_twocount": 2,
         "like_count": 3,
         "create_date": "2021-09-29",
         "avatar": "/images/userheader.png",
@@ -231,10 +211,11 @@ onMounted(() => {
             };
         }
     }).filter(item => item !== undefined);
-    console.log("CSData:", CSData.value);
+
 })
 
-
+//回复框
+const replyinput = ref('')
 
 </script>
 
@@ -332,7 +313,7 @@ onMounted(() => {
 
 .note-date,
 .comment-date {
-    padding: 10px 0;
+    padding: 8px 0;
     color: #999;
     font-size: 14px;
     border-bottom: 1px solid #ebebeb;
@@ -386,5 +367,20 @@ onMounted(() => {
 .reply-item {
     display: flex;
     flex-direction: column;
+}
+
+.replybox {
+    border: 1px solid #ebebeb;
+    padding: 10px;
+    background: #f7f7f7;
+}
+
+:deep(.el-button) {
+    height: 40px !important;
+    width: 64px !important;
+}
+
+.button {
+    margin-left: 10px;
 }
 </style>
