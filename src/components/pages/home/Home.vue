@@ -63,17 +63,14 @@ const userLikeNav = [
 //存放笔记的数组
 let noteStore = ref([])
 
-const LoadingData = async () => {
-  try {
-    const response = await axios.get('http://localhost:8080/note/notes')
-    noteStore.value = response.data.data
-    console.log("response.data:", response.data.data);
-    isLoading = false
-  } catch (error) {
-    console.error(error)
-  }
-}
-LoadingData()
+axios.get('http://localhost:8080/note/notes').then((response) => {
+  noteStore.value = response.data.data
+  console.log("response.data:", response.data.data);
+  isLoading = false
+}).catch((error) => {
+  console.error(error)
+})
+
 
 const groupedItems = computed(() => {
   let groups = [];

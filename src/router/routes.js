@@ -6,7 +6,7 @@ const routes = [
         title: '首页',
         component: () => import('../components/pages/home/Main.vue'),
         redirect: '/home',
-        children:[
+        children: [
             {
                 path: 'home',
                 name: 'Home',
@@ -19,7 +19,7 @@ const routes = [
                 title: '通知',
                 component: () => import('../components/pages/home/Notice.vue'),
                 redirect: '/notice/comments',
-                children:[
+                children: [
                     {
                         path: 'comments',
                         name: 'Comments',
@@ -42,18 +42,12 @@ const routes = [
                 meta: { requiresAuth: true },
             },
             {
-                path: 'note/:id', 
+                path: 'note/:id',
                 name: 'Note',
                 title: '笔记详情',
                 component: () => import('../components/pages/explore/Note.vue'),
                 props: true,
             },
-            {
-                path: 'register',
-                name: 'Register',
-                title: '注册',
-                component: () => import('../components/pages/home/Register.vue'),
-            }
         ]
     },
     {
@@ -63,7 +57,7 @@ const routes = [
         component: () => import('../components/pages/publish/Publish.vue'),
         meta: { requiresAuth: true },
         redirect: '/publish/creator',
-        children:[
+        children: [
             {
                 path: 'creator',
                 name: 'Creator',
@@ -77,6 +71,12 @@ const routes = [
                 component: () => import('../components/pages/publish/Manage.vue'),
             }
         ]
+    },
+    {
+        path: '/register',
+        name: 'Register',
+        title: '注册',
+        component: () => import('../components/pages/home/Register.vue'),
     }
 
 ]

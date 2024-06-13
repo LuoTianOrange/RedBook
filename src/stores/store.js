@@ -10,6 +10,8 @@ export const useNoteStore = defineStore('note',{
       this.noteData = noteData
     }
   }
+},{
+  persist: true,
 })
 
 export const loginStateStore = defineStore('loginState', {
