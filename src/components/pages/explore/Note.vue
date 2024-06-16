@@ -1,20 +1,20 @@
 <template>
     <div class="note-flex" v-if="!isLoading">
-        <div class="note-main" v-for="i in tempStore">
+        <div class="note-main">
             <div class="note-left">
                 <!-- <div class="note-image" :style="{ backgroundImage: `url(${i.noteCover})` }"></div> -->
-                <el-image class="note-image" :src="i.noteCover" :zoom-rate="1.2" :max-scale="7" :min-scale="0.2"
+                <el-image class="note-image" :src="noteData.noteCover" :zoom-rate="1.2" :max-scale="7" :min-scale="0.2"
                     :preview-src-list="srcList" :initial-index="1" fit="contain" />
             </div>
             <div class="note-right">
                 <div class="note-right-main">
                     <div class="note-userinfo">
-                        <img class="note-useravater" :src="i.avatar" />
-                        <div class="note-username">{{ i.username }}</div>
+                        <img class="note-useravater" :src="noteData.avatar" />
+                        <div class="note-username">{{ noteData.username }}</div>
                     </div>
-                    <div class="note-title">{{ i.title }}</div>
-                    <div class="note-content">{{ i.content }}</div>
-                    <div class="note-date">{{ i.update_date }}</div>
+                    <div class="note-title">{{ noteData.title }}</div>
+                    <div class="note-content">{{ noteData.content }}</div>
+                    <div class="note-date">{{ noteData.update_date }}</div>
                 </div>
                 <div style="margin-left: 15px;margin-bottom: 5px;">共{{ commentStorelenth }}条评论</div>
                 <div class="comments">
@@ -76,10 +76,13 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import { useNoteStore } from '../../../stores/store'
+import { useCommentStore, useNoteStore } from '../../../stores/store'
 import { storeToRefs } from 'pinia'
+import { Edit } from '@element-plus/icons-vue'
 import axios from 'axios'
 const noteStore = useNoteStore()
+const noteData = ref(null);
+let commentStore;
 const tempStore = ref([{
     "id": -458280468,
     "user_id": -165623116,
@@ -98,119 +101,46 @@ const tempStore = ref([{
     "avatar": "/images/userheader.png",
     "username": "小红薯664D4ED4"
 },])
-const commentStore = ref([
-    {
-        "id": 1,
-        "note_id": -1809236680,
-        "note_uid": -1201130460,
-        "user_id": -1001762608,
-        "reply_uid": 0,
-        "reply_id": 0,
-        "content": "一大段文字，文字是人类用符号记录表达信息以传之久远的方式和工具。现代文字大多是记录语言的工具。",
-        "comment_twocount": 2,
-        "like_count": 3,
-        "create_date": "2021-09-29",
-        "avatar": "/images/userheader.png",
-        "username": "小红薯664D4ED4"
-    },
-    {
-        "id": 2,
-        "note_id": -1809236680,
-        "note_uid": -1201130460,
-        "user_id": -1001762608,
-        "reply_uid": -1409893201,
-        "reply_id": 1,
-        "content": "一大段文字",
-        "comment_twocount": 2,
-        "like_count": 5,
-        "create_date": "2021-09-29",
-        "avatar": "https://ss0.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=257340989,3686561450&fm=253&gp=0.jpg",
-        "username": "小红薯35336663"
-    },
-    {
-        "id": 3,
-        "note_id": -1809236680,
-        "note_uid": -1201130460,
-        "user_id": -1001762608,
-        "reply_uid": -1409893201,
-        "reply_id": 1,
-        "content": "一大段文字",
-        "comment_twocount": 5,
-        "like_count": 4,
-        "create_date": "2021-09-29",
-        "username": "小红薯657556888",
-        "avatar": "/images/userheader.png",
-    },
-    {
-        "id": 4,
-        "note_id": -1809236680,
-        "note_uid": -1201130460,
-        "user_id": -1001762608,
-        "reply_uid": 0,
-        "reply_id": 0,
-        "content": "一大段文字2，文字是人类用符号记录表达信息以传之久远的方式和工具。现代文字大多是记录语言的工具。",
-        "comment_twocount": 4,
-        "like_count": 3,
-        "create_date": "2021-09-29",
-        "avatar": "/images/userheader.png",
-        "username": "小红薯664D4ED4"
-    },
-    {
-        "id": 5,
-        "note_id": -1809236680,
-        "note_uid": -1201130460,
-        "user_id": -1001762608,
-        "reply_uid": -1409893201,
-        "reply_id": 4,
-        "content": "一大段文字3",
-        "comment_twocount": 2,
-        "like_count": 5,
-        "create_date": "2021-09-29",
-        "avatar": "https://ss0.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=257340989,3686561450&fm=253&gp=0.jpg",
-        "username": "小红薯35336663"
-    },
-    {
-        "id": 6,
-        "note_id": -1809236680,
-        "note_uid": -1201130460,
-        "user_id": -1001762608,
-        "reply_uid": -1409893201,
-        "reply_id": 4,
-        "content": "一大段文字3",
-        "comment_twocount": 5,
-        "like_count": 4,
-        "create_date": "2021-09-29",
-        "username": "小红薯657556888",
-        "avatar": "/images/userheader.png",
-    }
-])
+
 
 let commentStorelenth = ref(0)
-//图片预览
-const srcList = ref([])
-srcList.value.push(tempStore.value[0].noteCover)
+
 
 let info = ref(null)
 let isLoading = ref(true)
 
 let CSData = ref([])
 
+//图片预览
+const srcList = ref([])
+
 onMounted(() => {
-    console.log("temp:", tempStore.value);
-    console.log("noteStore.noteData:", noteStore.noteData)
+
+    //获取数据
+    noteData.value = noteStore.noteData;
+    commentStore = useCommentStore(noteData.id)
+    console.log("commentStore:", commentStore);
+    console.log("noteData:", noteData)
+    console.log("noteData.value.id:", noteData.value.id)
     info.value = storeToRefs(noteStore.noteData)
     isLoading.value = false
-    console.log("info.value:", info.value);
-    commentStorelenth.value = commentStore.value.length
+    
+    if (noteData.value.id) {
+        commentStore.getCommentData(noteData.value.id);
+    }
 
-    CSData.value = commentStore.value.map(item => {
-        if (item.reply_id <= 0) {
-            return {
-                comment: item,
-                sub_reply: commentStore.value.filter(subItem => subItem.reply_id === item.id)
-            };
-        }
-    }).filter(item => item !== undefined);
+    commentStorelenth.value = commentStore.length
+    //将封面数据传入图片预览数值
+    srcList.value.push(noteData.value.noteCover)
+
+    // CSData.value = commentStore.value.map(item => {
+    //     if (item.reply_id <= 0) {
+    //         return {
+    //             comment: item,
+    //             sub_reply: commentStore.value.filter(subItem => subItem.reply_id === item.id)
+    //         };
+    //     }
+    // }).filter(item => item !== undefined);
 
 })
 

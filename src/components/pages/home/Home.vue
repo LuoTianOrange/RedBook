@@ -63,7 +63,7 @@ const userLikeNav = [
 //存放笔记的数组
 let noteStore = ref([])
 
-axios.get('http://localhost:8080/note/notes').then((response) => {
+axios.get('/api/note/notes').then((response) => {
   noteStore.value = response.data.data
   console.log("response.data:", response.data.data);
   isLoading = false

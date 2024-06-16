@@ -444,4 +444,8 @@ const CheckLogin = (item) => {
     font-size: 14px;
     color: #909399;
 }
+:deep(.el-dialog){
+    max-width: 700px!important;
+    min-width: 500px!important;
+}
 </style>

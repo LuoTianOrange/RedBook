@@ -33,7 +33,7 @@ const publishMenu = [
   {
     id: 1,
     title: '返回首页',
-    icon: 'Home',
+    icon: 'House',
     name: 'Home'
   },
   {

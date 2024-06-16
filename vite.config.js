@@ -10,7 +10,14 @@ export default defineConfig({
     }
   },
   server: {
-    host: true
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080', //目标url
+        changeOrigin: true, //支持跨域
+        rewrite: (path) => path.replace(/^\/api/, ""), 
+          //重写路径,替换/api
+      }
+    }
   },
   define: {
     __DEV__: process.env.NODE_ENV === 'development',
