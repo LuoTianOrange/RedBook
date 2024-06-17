@@ -17,22 +17,26 @@
                     <div class="note-date">{{ noteData.update_date }}</div>
                 </div>
                 <div style="margin-left: 15px;margin-bottom: 5px;">共{{ commentStorelenth }}条评论</div>
-                <div class="comments">
+                <div id="comments">
+                    <div style="width: 100%;height: 100%;display: flex;">
+                        <div v-if="commentStorelenth == 0" style="margin: auto;color: #999;">这里什么也没有</div>
+                    </div>
+                    <!--主评论-->
                     <div v-for="i in CSData" :key="i.index" class="comment-item">
                         <div style="display: flex;">
                             <img class="comment-avater" :src="i.comment.avatar" />
                             <div class="comment-userinfo">
                                 <div class="comment-username">{{ i.comment.username }}</div>
-                                <div class="comment-content">{{ i.comment.content }}</div>
-                                <div class="comment-date">{{ i.comment.create_date }}</div>
+                                <div class="comment-content">{{ i.comment.comment.content }}</div>
+                                <div class="comment-date">{{ i.comment.comment.create_date }}</div>
                                 <div class="comment-interactions">
                                     <div class="like">
                                         <i-like style="margin-right: 5px;" theme="outline" size="16" fill="#333" />
-                                        {{ i.comment.like_count }}
+                                        {{ i.comment.comment.likeCount }}
                                     </div>
                                     <div class="collection">
                                         <i-comment style="margin-right: 5px;" theme="outline" size="16" fill="#333" />
-                                        {{ i.comment.comment_twocount }}
+                                        {{ i.comment.comment.commentTwocount }}
                                     </div>
                                 </div>
                                 <!--回复-->
@@ -75,34 +79,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watchEffect } from 'vue';
 import { useCommentStore, useNoteStore } from '../../../stores/store'
 import { storeToRefs } from 'pinia'
 import { Edit } from '@element-plus/icons-vue'
 import axios from 'axios'
+
 const noteStore = useNoteStore()
-const noteData = ref(null);
-let commentStore;
-const tempStore = ref([{
-    "id": -458280468,
-    "user_id": -165623116,
-    "title": "我是标题",
-    "content": "文字是人类用符号记录表达信息以传之久远的方式和工具。现代文字大多是记录语言的工具。人类往往先有口头的语言后产生书面文字，很多小语种，有语言但没有文字。文字的不同体现了国家和民族的书面表达的方式和思维不同。文字使人类进入有历史记录的文明社会。",
-    "noteCover": "/images/20231029_124802_waifu2x_2x_2n_jpg.png",
-    "type": "id ea tempor reprehenderit do",
-    "urls": "Excepteur laborum enim dolore",
-    "picture_count": -253759575,
-    "like_count": 587561824,
-    "like_status": false,
-    "collection_status": true,
-    "collection_count": -1308163117,
-    "comment_count": -401467102,
-    "update_date": "2021-09-29",
-    "avatar": "/images/userheader.png",
-    "username": "小红薯664D4ED4"
-},])
+const noteData = ref([]);
 
-
+const commentStore = useCommentStore()
+const commentData = ref([])
 let commentStorelenth = ref(0)
 
 
@@ -113,36 +100,50 @@ let CSData = ref([])
 
 //图片预览
 const srcList = ref([])
+//发送请求
 
-onMounted(() => {
 
-    //获取数据
+onMounted(async () => {
+
+    //获取笔记数据
     noteData.value = noteStore.noteData;
-    commentStore = useCommentStore(noteData.id)
-    console.log("commentStore:", commentStore);
-    console.log("noteData:", noteData)
-    console.log("noteData.value.id:", noteData.value.id)
     info.value = storeToRefs(noteStore.noteData)
-    isLoading.value = false
-    
-    if (noteData.value.id) {
-        commentStore.getCommentData(noteData.value.id);
-    }
+    console.log("noteData:", noteData)
+    //获取评论数据
+    console.log(noteData.value.id);
 
-    commentStorelenth.value = commentStore.length
+    axios.get(`/api/comment/commentList/${noteData.value.id}`)
+        .then((response) => {
+            commentData.value = response.data.data
+            console.log("commentData:", commentData.value);
+        }).catch((error) => {
+            console.error(error)
+        })
+    //获取评论长度
+    watchEffect(() => {
+        commentStorelenth.value = commentData.value.length;
+    });
+    console.log("commentStorelenth:", commentStorelenth.value);
     //将封面数据传入图片预览数值
     srcList.value.push(noteData.value.noteCover)
 
-    // CSData.value = commentStore.value.map(item => {
-    //     if (item.reply_id <= 0) {
-    //         return {
-    //             comment: item,
-    //             sub_reply: commentStore.value.filter(subItem => subItem.reply_id === item.id)
-    //         };
-    //     }
-    // }).filter(item => item !== undefined);
+    //处理评论数据
+    watchEffect(() => {
+        let mainComments = commentData.value.filter(item => item.comment.replyUid <= 0);
+        let replyComments = commentData.value.filter(item => item.comment.replyUid > 0);
+        console.log("mainComments:", mainComments, "replyComments:", replyComments);
+        CSData.value = mainComments.map(mainComment => {
+            return {
+                comment: mainComment,
+                sub_reply: replyComments.filter(replyComment => replyComment.comment.replyUid === mainComment.comment.id)
+            };
+        });
+    });
+    console.log("CSData:", CSData);
 
+    isLoading.value = false
 })
+
 
 //回复框
 const replyinput = ref('')
@@ -258,8 +259,9 @@ const replyinput = ref('')
 
 @media screen and (min-width: 950px) {}
 
-.comments {
-    margin: 15px;
+#comments {
+    /* margin: 15px; */
+    margin: 10px 15px auto 15px;
     overflow: overlay;
 }
 

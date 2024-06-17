@@ -12,7 +12,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8080', //目标url
+        target: 'http://localhost:8081', //目标url
         changeOrigin: true, //支持跨域
         rewrite: (path) => path.replace(/^\/api/, ""), 
           //重写路径,替换/api

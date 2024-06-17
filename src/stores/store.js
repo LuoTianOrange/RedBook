@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
+
 export const useNoteStore = defineStore('note', {
   state: () => {
     return {
-      noteData: null
+      noteData: []
     }
   },
   actions: {
@@ -17,19 +18,23 @@ export const useNoteStore = defineStore('note', {
 export const useCommentStore = defineStore('comment', {
   state: () => {
     return {
-      commentData: null
+      commentData: []
     }
   },
   actions: {
-    getCommentData(note_id) {
-      axios.get(`/api/comment/commentList/${note_id}`)
-        .then(res => {
-          this.commentData = res.data
-          console.log("res.data：",res.data);
-        })
-        .catch(err => {
-          console.log(err)
-        })
+    // getCommentData(note_id) {
+    //   console.log("note_id:",note_id);
+    //   axios.get(`/api/comment/commentList/${note_id}`)
+    //     .then(res => {
+    //       this.commentData = res.data
+    //       console.log("commentData:",this.commentData);
+    //     })
+    //     .catch(err => {
+    //       console.log(err)
+    //     })
+    // }
+    setCommentData(commentData) {
+      this.commentData = commentData
     }
   }
 })
