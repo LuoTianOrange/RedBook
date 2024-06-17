@@ -12,7 +12,7 @@
         <div class="main-container-flex">
           <div class="main-container" v-for="list in groupedItems">
             <div class="main-item" v-for="info in list" :key="info.id" v-if="!isLoading">
-              <img style="object-fit: cover;width: 100%;" :src="info.note.noteCover" @click="goToNote(info.note)"
+              <img style="object-fit: cover;width: 100%;" :src="info.note.noteCover" @click="goToNote(info)"
                 class="main-item-top">
               <div class="main-item-bottom">
                 <span style="margin-bottom: 8px;">{{ info.note.title }}</span>
@@ -25,7 +25,7 @@
                   <div style="display: flex;align-items: center;">
                     <div style="margin-right: 5px;"><i-like theme="outline" size="20" fill="#333" />
                     </div>
-                    <div>34</div>
+                    <div>{{ info.note.likeCount }}</div>
                   </div>
                 </div>
               </div>
@@ -94,7 +94,7 @@ const noteList = useNoteStore()
 const router = useRouter()
 const goToNote = (noteData) => {
   noteList.setNoteData(noteData)
-  router.push(`note/${noteData.id}`)
+  router.push(`note/${noteData.note.id}`)
 }
 </script>
 

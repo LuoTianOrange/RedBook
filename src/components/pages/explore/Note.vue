@@ -9,8 +9,11 @@
             <div class="note-right">
                 <div class="note-right-main">
                     <div class="note-userinfo">
-                        <img class="note-useravater" :src="noteData.avatar" />
-                        <div class="note-username">{{ noteData.username }}</div>
+                        <div class="rl-center">
+                            <img class="note-useravater" :src="noteStore.noteData.avatar" />
+                            <div class="note-username">{{ noteStore.noteData.username }}</div>
+                        </div>
+                        <el-button id="follow-btn" color="#ff2e4d" round>关注</el-button>
                     </div>
                     <div class="note-title">{{ noteData.title }}</div>
                     <div class="note-content">{{ noteData.content }}</div>
@@ -18,8 +21,8 @@
                 </div>
                 <div style="margin-left: 15px;margin-bottom: 5px;">共{{ commentStorelenth }}条评论</div>
                 <div id="comments">
-                    <div style="width: 100%;height: 100%;display: flex;">
-                        <div v-if="commentStorelenth == 0" style="margin: auto;color: #999;">这里什么也没有</div>
+                    <div v-if="commentStorelenth == 0" style="width: 100%;height: 100%;display: flex;">
+                        <div style="margin: auto;color: #999;">这里什么也没有</div>
                     </div>
                     <!--主评论-->
                     <div v-for="i in CSData" :key="i.index" class="comment-item">
@@ -28,7 +31,7 @@
                             <div class="comment-userinfo">
                                 <div class="comment-username">{{ i.comment.username }}</div>
                                 <div class="comment-content">{{ i.comment.comment.content }}</div>
-                                <div class="comment-date">{{ i.comment.comment.create_date }}</div>
+                                <div class="comment-date">{{ formatDate(i.comment.comment.createDate) }}</div>
                                 <div class="comment-interactions">
                                     <div class="like">
                                         <i-like style="margin-right: 5px;" theme="outline" size="16" fill="#333" />
@@ -68,9 +71,20 @@
                 </div>
                 <div class="replybox">
                     <el-input v-model="replyinput"></el-input>
-                    <div style="display: flex;flex-direction: row-reverse;margin-top: 10px;">
-                        <el-button @click="replyinput = ''" round class="button">取消</el-button>
-                        <el-button :disabled="!replyinput" type="primary" :icon="Edit" round>发送</el-button>
+                    <div
+                        style="display: flex;flex-direction: row-reverse;justify-content: space-between;margin-top: 10px;">
+                        <div>
+                            <el-button @click="replyinput = ''" round class="button">取消</el-button>
+                            <el-button :disabled="!replyinput" type="primary" round>发送</el-button>
+                        </div>
+                        <div class="rl-center" style="color: #333;">
+                            <div class="rl-center" style="margin-right: 10px;"><i-like style="margin-right: 5px;"
+                                    theme="outline" size="22" fill="#333" />{{
+                                        noteData.likeCount }}</div>
+                            <div class="rl-center"><i-star style="margin-right: 5px;" theme="outline" size="22"
+                                    fill="#333" />{{
+                                        noteData.collectionCount }}</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -102,15 +116,15 @@ let CSData = ref([])
 const srcList = ref([])
 //发送请求
 
-
 onMounted(async () => {
 
     //获取笔记数据
-    noteData.value = noteStore.noteData;
-    info.value = storeToRefs(noteStore.noteData)
+    noteData.value = noteStore.noteData.note;
+    info.value = storeToRefs(noteStore.noteData.note)
     console.log("noteData:", noteData)
     //获取评论数据
     console.log(noteData.value.id);
+    //处理评论时间
 
     axios.get(`/api/comment/commentList/${noteData.value.id}`)
         .then((response) => {
@@ -144,7 +158,9 @@ onMounted(async () => {
     isLoading.value = false
 })
 
-
+const formatDate = (dateString) => {
+    return dateString.replace("T", " ");
+}
 //回复框
 const replyinput = ref('')
 
@@ -207,6 +223,7 @@ const replyinput = ref('')
 }
 
 .note-image {
+    min-width: 400px;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -228,6 +245,7 @@ const replyinput = ref('')
     display: flex;
     align-items: center;
     flex-direction: row;
+    justify-content: space-between;
 }
 
 .note-username,
@@ -314,5 +332,10 @@ const replyinput = ref('')
 
 .button {
     margin-left: 10px;
+}
+
+#follow-btn {
+    width: 96px !important;
+    font-weight: bolder !important;
 }
 </style>
