@@ -1,46 +1,10 @@
 <template>
     <div>
         <div class="main-container">
-            <el-container style="height: 100vh;">
-                <!--头部导航栏-->
-                <el-header class="header">
-                    <router-link class="header-logo-small" :to="{ name: 'Home' }">
-                        <img style="width: 80px;" src="/images/小红书logo.png" />
-                    </router-link>
-                    <div style="flex-grow: 1;"></div>
-                    <el-input v-model="searchbox" style="width: 500px;height: 40px;" size="large" placeholder="搜索小红书"
-                        :suffix-icon="Search" />
-                    <div style="flex-grow: 1;"></div>
-                    <el-menu mode="horizontal" class="el-menu-demo" style="width: 320px;">
-                        <el-sub-menu index="1">
-                            <template #title>创作中心</template>
-                            <el-menu-item index="1-1">创作服务</el-menu-item>
-                            <el-menu-item index="1-2">直播管理</el-menu-item>
-                        </el-sub-menu>
-                        <el-sub-menu index="2">
-                            <template #title>业务合作</template>
-                            <el-menu-item index="2-1">
-                                业务合作
-                            </el-menu-item>
-                            <el-menu-item index="2-2">
-                                专业号
-                            </el-menu-item>
-                            <el-menu-item index="2-3">
-                                推广合作
-                            </el-menu-item>
-                            <el-menu-item index="2-4">
-                                蒲公英
-                            </el-menu-item>
-                            <el-menu-item index="2-5">
-                                商家入驻
-                            </el-menu-item>
-                            <el-menu-item index="2-6">
-                                MCN入驻
-                            </el-menu-item>
-
-                        </el-sub-menu>
-                    </el-menu>
-                </el-header>
+            <!--头部导航栏-->
+            <Header></Header>
+            <el-container style="height: calc(100vh - 60px);">
+                <!--左侧菜单-->
                 <el-container>
                     <el-aside width="240px" class="menu">
                         <!-- <div
@@ -126,7 +90,7 @@
                                 </div>
                                 <div class="rl-center login-pwd">
                                     <div>忘记密码</div>
-                                    <div style="margin-left: 20px;">注册账号</div>
+                                    <router-link :to="{ name: 'Register' }" style="margin-left: 20px;">注册账号</router-link>
                                 </div>
                             </div>
                         </div>
@@ -153,7 +117,7 @@
 <script setup>
 import { computed, ref, reactive, onUnmounted} from 'vue'
 import { Search, House } from '@element-plus/icons-vue'
-import axios from 'axios'
+import Header from '../../tools/Header.vue'import axios from 'axios'
 import {userIdStore} from '../../../stores/user';  
 
 let imgsrc = new URL(`../../assets/images/${name}.png`, import.meta.url).href
@@ -548,5 +512,9 @@ const CheckLogin = (item) => {
 .menu-bottom-text {
     font-size: 14px;
     color: #909399;
+}
+:deep(.el-dialog){
+    max-width: 700px!important;
+    min-width: 500px!important;
 }
 </style>

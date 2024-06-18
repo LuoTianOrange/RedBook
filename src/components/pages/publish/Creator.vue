@@ -1,4 +1,5 @@
 <template>
+  <!--发布页面-->
   <div class="publish-flex">
     <div class="publish-main">
       <div style="height: 100%;padding:0 30px;max-width: calc(100% - 60px);width: 100%;">

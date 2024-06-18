@@ -1,42 +1,8 @@
 <template>
   <div class="main-container">
-    <el-container style="height: 100vh;">
-      <!--头部导航栏-->
-      <el-header class="header">
-        <router-link class="header-logo-small" :to="{ name: 'Home' }">
-          <img style="width: 80px;" src="/images/小红书logo.png" />
-        </router-link>
-        <div style="flex-grow: 1;"></div>
-        <el-menu mode="horizontal" class="el-menu-demo" style="width: 320px;">
-          <el-sub-menu index="1">
-            <template #title>创作中心</template>
-            <el-menu-item index="1-1">创作服务</el-menu-item>
-            <el-menu-item index="1-2">直播管理</el-menu-item>
-          </el-sub-menu>
-          <el-sub-menu index="2">
-            <template #title>业务合作</template>
-            <el-menu-item index="2-1">
-              业务合作
-            </el-menu-item>
-            <el-menu-item index="2-2">
-              专业号
-            </el-menu-item>
-            <el-menu-item index="2-3">
-              推广合作
-            </el-menu-item>
-            <el-menu-item index="2-4">
-              蒲公英
-            </el-menu-item>
-            <el-menu-item index="2-5">
-              商家入驻
-            </el-menu-item>
-            <el-menu-item index="2-6">
-              MCN入驻
-            </el-menu-item>
-
-          </el-sub-menu>
-        </el-menu>
-      </el-header>
+    <!--头部导航栏-->
+    <Header></Header>
+    <el-container style="height:calc(100vh - 60px);">
       <el-container>
         <el-aside width="220px" class="menu">
           <router-link :to="{ name: 'Creator' }" class="menu-publish-btn">
@@ -62,12 +28,20 @@
 
 <script setup>
 import { ref, onUnmounted } from 'vue'
-const publishMenu = [{
-  id: 1,
-  title: '管理笔记',
-  icon: 'Edit',
-  name: 'Manage'
-},
+import Header from '../../tools/Header.vue'
+const publishMenu = [
+  {
+    id: 1,
+    title: '返回首页',
+    icon: 'House',
+    name: 'Home'
+  },
+  {
+    id: 2,
+    title: '管理笔记',
+    icon: 'Edit',
+    name: 'Manage'
+  },
 ]
 //菜单点中时变背景色
 const publishSelected = ref(1)
@@ -164,5 +138,4 @@ onUnmounted(() => {
 .isSelect {
   background-color: #F2F7FF;
 }
-
 </style>

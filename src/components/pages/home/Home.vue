@@ -12,9 +12,8 @@
         <div class="main-container-flex">
           <div class="main-container" v-for="list in groupedItems">
             <div class="main-item" v-for="info in list" :key="info.id" v-if="!isLoading">
-              <div @click="goToNote(info.note)" class="main-item-top">
-                <img style="object-fit: cover;width: 100%;" :src="info.note.noteCover">
-              </div>
+              <img style="object-fit: cover;width: 100%;" :src="info.note.noteCover" @click="goToNote(info)"
+                class="main-item-top">
               <div class="main-item-bottom">
                 <span style="margin-bottom: 8px;">{{ info.note.title }}</span>
                 <div style="display: flex;justify-content: space-between;margin-top: 8px;">
@@ -26,7 +25,7 @@
                   <div style="display: flex;align-items: center;">
                     <div style="margin-right: 5px;"><i-like theme="outline" size="20" fill="#333" />
                     </div>
-                    <div>34</div>
+                    <div>{{ info.note.likeCount }}</div>
                   </div>
                 </div>
               </div>
@@ -64,17 +63,14 @@ const userLikeNav = [
 //存放笔记的数组
 let noteStore = ref([])
 
-const LoadingData = async () => {
-  try {
-    const response = await axios.get('http://localhost:8081/note/notes')
-    noteStore.value = response.data.data
-    console.log("response.data:", response.data.data);
-    isLoading = false
-  } catch (error) {
-    console.error(error)
-  }
-}
-LoadingData()
+axios.get('/api/note/notes').then((response) => {
+  noteStore.value = response.data.data
+  console.log("response.data:", response.data.data);
+  isLoading = false
+}).catch((error) => {
+  console.error(error)
+})
+
 
 const groupedItems = computed(() => {
   let groups = [];
@@ -98,15 +94,11 @@ const noteList = useNoteStore()
 const router = useRouter()
 const goToNote = (noteData) => {
   noteList.setNoteData(noteData)
-  router.push(`note/${noteData.id}`)
+  router.push(`note/${noteData.note.id}`)
 }
 </script>
 
 <style scoped>
-/*滚动条隐藏*/
-::-webkit-scrollbar {
-  display: none;
-}
 
 /*Main*/
 .el-main-css {
