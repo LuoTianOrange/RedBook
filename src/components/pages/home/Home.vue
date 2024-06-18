@@ -66,7 +66,7 @@ let noteStore = ref([])
 
 const LoadingData = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/note/notes')
+    const response = await axios.get('http://localhost:8081/note/notes')
     noteStore.value = response.data.data
     console.log("response.data:", response.data.data);
     isLoading = false

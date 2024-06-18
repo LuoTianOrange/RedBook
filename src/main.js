@@ -11,10 +11,13 @@ import pinia from './stores'
 import axios from 'axios'
 
 const app = createApp(App)
+
 app.use(ElementPlus).use(router).use(pinia).use(axios)
 
 install(app, 'i')
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
+
+
 app.mount('#app')
