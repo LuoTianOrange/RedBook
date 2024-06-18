@@ -78,12 +78,14 @@
                             <el-button :disabled="!replyinput" type="primary" round>发送</el-button>
                         </div>
                         <div class="rl-center" style="color: #333;">
-                            <div class="rl-center" style="margin-right: 10px;"><i-like style="margin-right: 5px;"
-                                    theme="outline" size="22" fill="#333" />{{
-                                        noteData.likeCount }}</div>
-                            <div class="rl-center"><i-star style="margin-right: 5px;" theme="outline" size="22"
-                                    fill="#333" />{{
-                                        noteData.collectionCount }}</div>
+                            <div class="rl-center" style="margin-right: 10px;">
+                                <i-like style="margin-right: 5px;" theme="outline" size="22" fill="#333" />
+                                {{ noteData.likeCount }}
+                            </div>
+                            <div class="rl-center">
+                                <i-star style="margin-right: 5px;" theme="outline" size="22" fill="#333" />
+                                {{ noteData.collectionCount }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -96,7 +98,6 @@
 import { ref, onMounted, computed, watchEffect } from 'vue';
 import { useCommentStore, useNoteStore } from '../../../stores/store'
 import { storeToRefs } from 'pinia'
-import { Edit } from '@element-plus/icons-vue'
 import axios from 'axios'
 
 const noteStore = useNoteStore()
@@ -137,7 +138,6 @@ onMounted(async () => {
     watchEffect(() => {
         commentStorelenth.value = commentData.value.length;
     });
-    console.log("commentStorelenth:", commentStorelenth.value);
     //将封面数据传入图片预览数值
     srcList.value.push(noteData.value.noteCover)
 
@@ -157,7 +157,7 @@ onMounted(async () => {
 
     isLoading.value = false
 })
-
+//去除时间中间的T字符并替换成空格
 const formatDate = (dateString) => {
     return dateString.replace("T", " ");
 }

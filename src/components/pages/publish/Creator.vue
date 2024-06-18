@@ -6,9 +6,10 @@
         <div class="publish-header-title">发布图文</div>
         <div class="photo-upload">
           <div class="photo-upload-title">图片编辑</div>
-          <el-upload v-model:file-list="pictureList"
-            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" list-type="picture-card"
-            :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
+          <el-upload v-model:file-list="pictureList" action="/api/upload/" list-type="picture-card"
+            :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :auto-upload="false"
+            :on-success="handleSuccess"
+            :before-upload="handleBeforeUpload">
             <el-icon>
               <Plus />
             </el-icon>
@@ -23,12 +24,12 @@
           <el-input class="input" v-model="content" maxlength="1000" show-word-limit placeholder="填写更全面的描述信息，让更多的人看到你吧！"
             :autosize="{ minRows: 2, maxRows: 4 }" warp="soft" type="textarea"></el-input>
           <div>
-            <el-select class="input" style="width: 200px;">
+            <el-select v-model="selectValue" class="input" style="width: 200px;">
               <el-option v-for="i in topicStore" :key="i.id" :label="i.topic" :value="i.topic"></el-option>
             </el-select>
           </div>
           <div style="margin-top: 40px;">
-            <el-button class="commit-btn">发布</el-button>
+            <el-button :disabled="!(selectValue && title && content)" @click="uploadFile" class="commit-btn" color="#ff2e4d">发布</el-button>
             <el-button style="width: 80px!important;">取消</el-button>
           </div>
         </div>
@@ -39,10 +40,12 @@
 </template>
 
 <script setup>
+import axios from 'axios'
 import { ref, reactive } from 'vue'
 
 const title = ref('')
 const content = ref('')
+const selectValue = ref('')
 //话题下拉菜单
 const topicStore = [
   {
@@ -68,40 +71,25 @@ const topicStore = [
 ]
 
 //图片上传
-const pictureList = ref([
-  {
-    name: 'food.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
-  {
-    name: 'imageMogr4',
-    url: '/images/imageMogr4.png',
-  },
-  {
-    name: 'food.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
-  {
-    name: 'imageMogr4',
-    url: '/images/imageMogr4.png',
-  },
-  {
-    name: 'food.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
-  {
-    name: 'imageMogr4.png',
-    url: '/images/imageMogr4.png',
-  },
-  {
-    name: 'food.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
-  {
-    name: 'imageMogr4.png',
-    url: '/images/imageMogr4.png',
-  },])
+function handleSuccess(file) {
+  console.log(file);
+  file.push(pictureList);
+}
 
+function handleBeforeUpload(file){
+  files.push(file)
+  return false
+}
+
+const pictureList = ref([
+  // {
+  //   name: 'food.jpeg',
+  //   url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+  // }
+])
+
+
+// ————————————————————————
 const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
 
@@ -184,11 +172,11 @@ const handlePictureCardPreview = (uploadFile) => {
 }
 
 .commit-btn {
-  background-color: #ff2e4d !important;
   color: white !important;
   border: none !important;
   width: 80px !important;
 }
+
 /* 背景 */
 
 .bg {
