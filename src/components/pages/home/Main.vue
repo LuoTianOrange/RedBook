@@ -117,7 +117,8 @@
 <script setup>
 import { computed, ref, reactive, onUnmounted} from 'vue'
 import { Search, House } from '@element-plus/icons-vue'
-import Header from '../../tools/Header.vue'import axios from 'axios'
+import Header from '../../tools/Header.vue'
+import axios from 'axios'
 import {userIdStore} from '../../../stores/user';  
 
 let imgsrc = new URL(`../../assets/images/${name}.png`, import.meta.url).href
