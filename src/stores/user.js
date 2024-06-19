@@ -1,5 +1,19 @@
 import { defineStore } from 'pinia'
 
+export const userNoteStore = defineStore('user-note', {
+  state: () => {
+  return {
+  noteData: []
+  }
+  },
+  actions: {
+  setNoteData(noteData) {
+  this.noteData = noteData
+  }
+  },
+  persist: true,
+  })
+
 export const userIdStore = defineStore('user',{
   state: () => ({
     userData:[]
