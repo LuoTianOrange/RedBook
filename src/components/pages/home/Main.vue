@@ -121,15 +121,19 @@ import Header from '../../tools/Header.vue'
 import axios from 'axios'
 import {userIdStore} from '../../../stores/user';  
 
+let info = ref(null)
 let imgsrc = new URL(`../../assets/images/${name}.png`, import.meta.url).href
 const searchbox = ref('');
 const account = ref('');  
 const password = ref(''); 
 const errorMessage = ref('');
 const userStore = userIdStore();
+
+
+
 const login = async () => {  
       try {  
-        const response = await axios.get('http://localhost:8081/user/login', {      
+        const response = await axios.get(`/api/user/login`, {      
           params: {  
             username: account.value, 
             password: password.value,  
@@ -138,8 +142,10 @@ const login = async () => {
         if (response.data.msg == null) {  
             LoginVisible.value = false
             isLoggedIn.value = true
-            userStore.setId(response.data.data.id); // 更新全局状态中的用户id   
-            userStore.setToken(response.data.data.token); 
+            userStore.setUserData(response.data.data); // 更新全局状态中的用户id   
+            
+            
+            
             
             
         } else {  

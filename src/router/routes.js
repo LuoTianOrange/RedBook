@@ -39,7 +39,7 @@ const routes = [
                 name: 'MyInfo',
                 title: '我的',
                 component: () => import('../components/pages/home/MyInfo.vue'),
-                meta: { requiresAuth: true },
+                // meta: { requiresAuth: true },
             },
             {
                 path: 'note/:id',
@@ -55,7 +55,7 @@ const routes = [
         name: 'Publish',
         title: '发布',
         component: () => import('../components/pages/publish/Publish.vue'),
-        meta: { requiresAuth: true },
+        // meta: { requiresAuth: true },
         redirect: '/publish/creator',
         children: [
             {

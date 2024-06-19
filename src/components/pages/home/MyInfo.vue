@@ -3,7 +3,7 @@
         <el-main class="el-main-css">
             <div class="user">
                 <div class="user-header">
-                    <img src="/images/userheader.png" style="width: 100%;">
+                    <img :src="avatar" style="width: 100%;">
                 </div>
                 <div class="user-info" v-for="user in userInfoStore">
                     <div class="username">{{ user.username }}</div>
@@ -29,7 +29,38 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref ,onMounted} from 'vue'
+
+let avatar = ref('')
+// 创建一个响应式的 user 引用  
+const user = ref(null)  
+  
+// 在组件挂载后从 localStorage 获取用户信息  
+onMounted(async () => {  
+  try {  
+    // 假设 localStorage 中存储的用户信息是一个 JSON 字符串  
+    const storedUser = localStorage.getItem('user')  
+    if (storedUser) {  
+      // 将 JSON 字符串解析为对象并赋值给 user 引用  
+      user.value = JSON.parse(storedUser)  
+      console.log(user.value)
+      userInfoStore.value[0].username = user.value.userData.username
+      userInfoStore.value[0].usercontent = user.value.id
+      userInfoStore.value[0].userdesc = user.value.userData.description
+      const newUserInteractions = [  
+        { show: "关注", count: user.value.userData.followerCount },  
+        { show: "粉丝", count: user.value.userData.fans },  
+        { show: "获赞与收藏", count: 999 }  
+      ]  
+  
+      // 更新 userInfoStore 中第一个对象的 userInteractions  
+      userInfoStore.value[0].userinteractions = newUserInteractions
+      avatar = user.value.userData.avatar
+    }  
+  } catch (error) {  
+    console.error('获取用户信息时发生错误:', error)  
+  }  
+})
 
 //导航点中时变背景色
 const userInfoSel = ref(1)
@@ -52,8 +83,8 @@ const userInfoNav = [
     }
 ]
 
-const userInfoStore = [{
-    username: "小红薯664D6ED4",
+const userInfoStore = ref([{
+    username: "username",
     usercontent: "144141415",
     userdesc: "还没有简介",
     userinteractions: [{
@@ -66,7 +97,7 @@ const userInfoStore = [{
         show: "获赞与收藏",
         count: 0
     }]
-}]
+}])
 console.log(userInfoStore);
 </script>
 
