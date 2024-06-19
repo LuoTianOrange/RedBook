@@ -2,22 +2,14 @@ import { defineStore } from 'pinia'
 
 export const userIdStore = defineStore('user',{
   state: () => ({
-    token:'',
-    id: '444',
-    // isLoggedIn: false, 
+    userData:[]
   }),
   actions: {
 
-    setId(id) {
-      this.id = id
-      localStorage.setItem('user', id)
-    },
-    setToken(token) {  
-      this.token = token  
-      localStorage.setItem('user-token', token) // 保存到localStorage  
-    },  
-    
-   
+    setUserData(userData) {
+      this.userData = userData
+      localStorage.setItem('user', userData)
+    }, 
   },
   persist:true,
   // setup() {  
