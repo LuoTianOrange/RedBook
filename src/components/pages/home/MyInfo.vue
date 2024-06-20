@@ -23,13 +23,26 @@
                         @click="ChangeuserInfoNav(index + 1)" :class="{ 'isSelect': userInfoSel === index + 1 }">
                         {{ item.name }}</div>
                 </div>
+                <!-- 内容展示部分 -->
+                <!-- <div style="max-height: calc(100vh - 290px);overflow: auto;">
+                    <div class="main-container-flex">
+                    hhhh
+                    </div>
+                </div> -->
             </div>
+            
         </el-main>
     </el-container>
 </template>
 
 <script setup>
 import { computed, ref ,onMounted} from 'vue'
+import { userNoteStore } from '../../../stores/user'
+import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
+import axios from 'axios'
+
+const noteStore = userNoteStore()
 
 let avatar = ref('')
 // 创建一个响应式的 user 引用  
@@ -45,7 +58,7 @@ onMounted(async () => {
       user.value = JSON.parse(storedUser)  
       console.log(user.value)
       userInfoStore.value[0].username = user.value.userData.username
-      userInfoStore.value[0].usercontent = user.value.id
+      userInfoStore.value[0].usercontent = user.value.userData.id
       userInfoStore.value[0].userdesc = user.value.userData.description
       const newUserInteractions = [  
         { show: "关注", count: user.value.userData.followerCount },  
@@ -56,11 +69,30 @@ onMounted(async () => {
       // 更新 userInfoStore 中第一个对象的 userInteractions  
       userInfoStore.value[0].userinteractions = newUserInteractions
       avatar = user.value.userData.avatar
+
+      //获取个人笔记信息
+        axios.get(`/api/note/notes/${user.value.userData.id}`)
+        .then((response) => {
+        noteStore.setNoteData(response.data.data)
+        }).catch((error) => {
+        console.error(error)
+})
     }  
   } catch (error) {  
     console.error('获取用户信息时发生错误:', error)  
   }  
 })
+
+
+
+//跳转笔记页面
+const noteList = userNoteStore()
+
+const router = useRouter()
+const goToNote = (noteData) => {
+  noteList.setNoteData(noteData)
+  router.push(`note/${noteData.note.id}`)
+}
 
 //导航点中时变背景色
 const userInfoSel = ref(1)
@@ -184,4 +216,13 @@ console.log(userInfoStore);
     display: flex;
     justify-content: center;
 }
+
+.main-container-flex {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+
 </style>
