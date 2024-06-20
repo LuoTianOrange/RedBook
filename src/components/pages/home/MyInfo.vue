@@ -26,12 +26,12 @@
                 <!-- 内容展示部分 -->
                 <div class="main-container">
                     <div class="main-container-flex">
-                        <div class="note-item" v-for="i in displayedNotes" :key="i.id">
-                            <img :src="i.noteCover" class="note-img">
-                            <div>{{ i.title }}</div>
-                            <div>
-                                <img src="" alt="userheader">
-                                <div>{{ 用户名 }}</div>
+                        <div class="note-item" v-for="i in MynoteStore" :key="i.id">
+                            <img :src="i.note.noteCover" class="note-img">
+                            <div class="note-title">{{ i.note.title }}</div>
+                            <div class="note-content">
+                                <img :src="i.avatar" class="avatar-img">
+                                <div class="mynote-username">{{i.username}}</div>
                             </div>
                         </div>
                     </div>
@@ -49,14 +49,15 @@
 
 <script setup>
 import { computed, ref, onMounted } from 'vue'
-import { userNoteStore } from '../../../stores/user'
+import { myNoteStore } from '../../../stores/user'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 
-const noteStore = userNoteStore()
+const mynoteStore = myNoteStore()
 
 let avatar = ref('')
+
 // 创建一个响应式的 user 引用  
 const user = ref(null)
 
@@ -85,7 +86,11 @@ onMounted(async () => {
             //获取个人笔记信息
             axios.get(`/api/note/notes/${user.value.userData.id}`)
                 .then((response) => {
-                    noteStore.setNoteData(response.data.data)
+                    mynoteStore.setNoteData(response.data.data)
+                    
+                    MynoteStore.value = response.data.data
+                    
+                    console.log(MynoteStore.value)
                 }).catch((error) => {
                     console.error(error)
                 })
@@ -135,113 +140,7 @@ console.log(userInfoStore);
 
 
 //用于接收笔记的响应式数组
-const MynoteStore = ref([
-    {
-        "id": 2046975644,
-        "user_id": 906190192,
-        "title": "春",
-        "content": "cillum ut",
-        "noteCover": "/images/39eb38.jpg",
-        "type": "ut dolor L",
-        "urls": "consequat commodo velit do Excepteur",
-        "picture_count": 863963589,
-        "like_count": -1953051395,
-        "like_status": true,
-        "collection_status": true,
-        "collection_count": 1130386215,
-        "comment_count": 673008498
-    },
-    {
-        "id": 2046975644,
-        "user_id": 906190192,
-        "title": "夏",
-        "content": "cillum ut",
-        "noteCover": "/images/20240415_112933.jpg",
-        "type": "ut dolor L",
-        "urls": "consequat commodo velit do Excepteur",
-        "picture_count": 863963589,
-        "like_count": -1953051395,
-        "like_status": true,
-        "collection_status": true,
-        "collection_count": 1130386215,
-        "comment_count": 673008498
-    },
-    {
-        "id": 2046975644,
-        "user_id": 906190192,
-        "title": "夏",
-        "content": "cillum ut",
-        "noteCover": "/images/20240415_112933.jpg",
-        "type": "ut dolor L",
-        "urls": "consequat commodo velit do Excepteur",
-        "picture_count": 863963589,
-        "like_count": -1953051395,
-        "like_status": true,
-        "collection_status": true,
-        "collection_count": 1130386215,
-        "comment_count": 673008498
-    },
-    {
-        "id": 2046975644,
-        "user_id": 906190192,
-        "title": "Miku",
-        "content": "cillum ut",
-        "noteCover": "/images/20240312_192636.jpg",
-        "type": "ut dolor L",
-        "urls": "consequat commodo velit do Excepteur",
-        "picture_count": 863963589,
-        "like_count": -1953051395,
-        "like_status": true,
-        "collection_status": true,
-        "collection_count": 1130386215,
-        "comment_count": 673008498
-    },
-    {
-        "id": 2046975644,
-        "user_id": 906190192,
-        "title": "Miku",
-        "content": "cillum ut",
-        "noteCover": "/images/20240312_192636.jpg",
-        "type": "ut dolor L",
-        "urls": "consequat commodo velit do Excepteur",
-        "picture_count": 863963589,
-        "like_count": -1953051395,
-        "like_status": true,
-        "collection_status": true,
-        "collection_count": 1130386215,
-        "comment_count": 673008498
-    },
-    {
-        "id": 2046975644,
-        "user_id": 906190192,
-        "title": "Miku",
-        "content": "cillum ut",
-        "noteCover": "/images/20240312_192636.jpg",
-        "type": "ut dolor L",
-        "urls": "consequat commodo velit do Excepteur",
-        "picture_count": 863963589,
-        "like_count": -1953051395,
-        "like_status": true,
-        "collection_status": true,
-        "collection_count": 1130386215,
-        "comment_count": 673008498
-    },
-    {
-        "id": 2046975644,
-        "user_id": 906190192,
-        "title": "夏",
-        "content": "cillum ut",
-        "noteCover": "/images/20240415_112933.jpg",
-        "type": "ut dolor L",
-        "urls": "consequat commodo velit do Excepteur",
-        "picture_count": 863963589,
-        "like_count": -1953051395,
-        "like_status": true,
-        "collection_status": true,
-        "collection_count": 1130386215,
-        "comment_count": 673008498
-    },
-])
+const MynoteStore = ref([])
 //笔记数量，用onMounted是为了在页面加载前就获取笔记数量
 const notecount = ref(0)
 /**
@@ -383,6 +282,20 @@ const isLastPage = computed(() => {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
+}
+
+.note-content{
+    width: 100%;
+    display: flex;
+    
+}
+
+.avatar-img{
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 0 1px rgb(141, 141, 141);
 }
 
 .note-item {
