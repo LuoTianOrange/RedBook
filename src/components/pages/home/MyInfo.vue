@@ -372,7 +372,7 @@ const isLastPage = computed(() => {
     flex-direction: column;
 }
 .main-container{
-    width: 100%;
+    max-width: 800px;
     max-height: calc(-290px + 100vh);
     display: flex;
     flex-direction: column;
@@ -382,7 +382,7 @@ const isLastPage = computed(() => {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: center;
 }
 
 .note-item {

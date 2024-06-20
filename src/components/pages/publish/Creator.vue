@@ -8,8 +8,7 @@
           <div class="photo-upload-title">图片编辑</div>
           <el-upload v-model:file-list="pictureList" action="/api/upload/" list-type="picture-card"
             :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :auto-upload="false"
-            :on-success="handleSuccess"
-            :before-upload="handleBeforeUpload">
+            :on-success="handleSuccess" :on-change="handleUpload" :before-upload="handleBeforeUpload">
             <el-icon>
               <Plus />
             </el-icon>
@@ -29,7 +28,8 @@
             </el-select>
           </div>
           <div style="margin-top: 40px;">
-            <el-button :disabled="!(selectValue && title && content)" @click="uploadFile" class="commit-btn" color="#ff2e4d">发布</el-button>
+            <el-button :disabled="!(selectValue && title && content)" @click="uploadFile" class="commit-btn"
+              color="#ff2e4d">发布</el-button>
             <el-button style="width: 80px!important;">取消</el-button>
           </div>
         </div>
@@ -71,30 +71,48 @@ const topicStore = [
 ]
 
 //图片上传
-function handleSuccess(file) {
+const handleSuccess = (file) => {
   console.log(file);
-  file.push(pictureList);
+  files.push(pictureList);
 }
 
-function handleBeforeUpload(file){
+function handleBeforeUpload(file) {
   files.push(file)
   return false
 }
 
-const pictureList = ref([
-  // {
-  //   name: 'food.jpeg',
-  //   url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  // }
-])
+const pictureList = ref([])
+const handleUpload = (file, filelist) => {
+  pictureList.value = filelist
+}
 
+const uploadFile = (files) => {
+  const formData = new FormData()
+  pictureList.value.forEach((file) => {
+    formData.append('files', file.raw);
+  });
+
+  formData.append('title', title.value)
+  formData.append('content', content.value)
+  formData.append('topic', selectValue.value)
+  for (let pair of formData.entries()) {
+    console.log(pair[0] + ', ' + pair[1]);
+  }
+  axios.post('/api/note/addnote', formData)
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+}
 
 // ————————————————————————
 const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
 
-const handleRemove = (uploadFile, uploadFiles) => {
-  console.log(uploadFile, uploadFiles)
+const handleRemove = (uploadFile) => {
+  console.log("uploadFile",uploadFile)
 }
 
 const handlePictureCardPreview = (uploadFile) => {
