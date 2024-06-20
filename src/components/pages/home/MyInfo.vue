@@ -26,7 +26,7 @@
                 <!-- 内容展示部分 -->
                 <div class="main-container">
                     <div class="main-container-flex">
-                        <div class="note-item" v-for="i in MynoteStore" :key="i.id">
+                        <div class="note-item" v-for="i in displayedNotes" :key="i.id">
                             <img :src="i.note.noteCover" class="note-img">
                             <div class="note-title">{{ i.note.title }}</div>
                             <div class="note-content">
@@ -50,11 +50,16 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue'
 import { myNoteStore } from '../../../stores/user'
+import { myCollectNoteStore } from '../../../stores/user'
+import { myLikeNoteStore } from '../../../stores/user'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 
 const mynoteStore = myNoteStore()
+const mycollectStore = myCollectNoteStore()
+const mylikeStore = myLikeNoteStore()
+
 
 let avatar = ref('')
 
@@ -86,14 +91,36 @@ onMounted(async () => {
             //获取个人笔记信息
             axios.get(`/api/note/notes/${user.value.userData.id}`)
                 .then((response) => {
-                    mynoteStore.setNoteData(response.data.data)
-                    
-                    MynoteStore.value = response.data.data
-                    
+                    mynoteStore.setNoteData(response.data.data)         
+                    MynoteStore.value = response.data.data             
                     console.log(MynoteStore.value)
                 }).catch((error) => {
                     console.error(error)
                 })
+
+
+            //获取作者收藏笔记列表
+            axios.get(`/api/like/getLikeList/${user.value.userData.id}`)
+                .then((response) => {
+                    mycollectStore.setNoteData(response.data.data)         
+                    MycollectStore.value = response.data.data             
+                    console.log(MycollectStore.value)
+                }).catch((error) => {
+                    console.error(error)
+                })
+
+
+             //获取作者点赞笔记列表
+             axios.get(`/api/collect/getCollectList/${user.value.userData.id}`)
+                .then((response) => {
+                    mylikeStore.setNoteData(response.data.data)         
+                    MylikeStore.value = response.data.data             
+                    console.log(mylikeStore.value)
+                }).catch((error) => {
+                    console.error(error)
+                })
+
+
         }
     } catch (error) {
         console.error('获取用户信息时发生错误:', error)
@@ -139,8 +166,10 @@ const userInfoStore = ref([{
 console.log(userInfoStore);
 
 
-//用于接收笔记的响应式数组
+//用于接收我的笔记的响应式数组
 const MynoteStore = ref([])
+const MycollectStore = ref([])
+const MylikeStore = ref([])
 //笔记数量，用onMounted是为了在页面加载前就获取笔记数量
 const notecount = ref(0)
 /**
@@ -162,7 +191,20 @@ const pageSize = 6
 const displayedNotes = computed(() => {
     const start = (currentPage.value - 1) * pageSize
     const end = start + pageSize
-    return MynoteStore.value.slice(start, end)
+    let notes;  
+    switch (userInfoSel.value) {  
+        case 1: // 笔记  
+            notes = MynoteStore.value.slice(start, end); // 返回所有笔记  
+            break;  
+        case 2: // 收藏  
+            notes = MycollectStore.value.slice(start, end); // 收藏的笔记  
+            break;  
+        case 3: // 点赞  
+            notes = MylikeStore.value.slice(start, end); // 点赞的笔记  
+            break;  
+        default:  
+            notes = []; // 默认返回空数组  
+        }return notes;          
 })
 
 // 当前页码改变时的处理函数
