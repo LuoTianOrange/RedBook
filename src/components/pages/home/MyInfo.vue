@@ -159,6 +159,7 @@ console.log(userInfoStore);
 
 .user-header {
     width: 160px;
+    height: 160px;
     border-radius: 50%;
     overflow: hidden;
     box-shadow: 0 0 1px rgb(141, 141, 141);
