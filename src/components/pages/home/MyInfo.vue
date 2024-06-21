@@ -27,7 +27,7 @@
                 <div class="main-container">
                     <div class="main-container-flex">
                         <div class="note-item" v-for="i in displayedNotes" :key="i.id">
-                            <img :src="i.note.noteCover" class="note-img">
+                            <img :src="i.note.noteCover" class="note-img" @click="goToNote(i)">
                             <div class="note-title">{{ i.note.title }}</div>
                             <div class="note-content">
                                 <img :src="i.avatar" class="avatar-img">
@@ -55,6 +55,8 @@ import { myLikeNoteStore } from '../../../stores/user'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
+import useNoteStore from '../../../stores/store'
+
 
 const mynoteStore = myNoteStore()
 const mycollectStore = myCollectNoteStore()
@@ -65,6 +67,14 @@ let avatar = ref('')
 
 // 创建一个响应式的 user 引用  
 const user = ref(null)
+
+//跳转笔记页面
+const noteList = useNoteStore()
+const router = useRouter()
+const goToNote = (noteData) => {
+  noteList.setNoteData(noteData)
+  router.push(`note/${noteData.note.id}`)
+}
 
 // 在组件挂载后从 localStorage 获取用户信息  
 onMounted(async () => {
