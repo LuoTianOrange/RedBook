@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 
+//我的笔记
 export const myNoteStore = defineStore('mynote', {
   state: () => {
     return {
@@ -13,6 +14,37 @@ export const myNoteStore = defineStore('mynote', {
   },
   persist: true,
 })
+
+//我收藏的笔记
+export const myCollectNoteStore = defineStore('myCollectNote', {
+  state: () => {
+    return {
+      myCollectNoteData: []
+    }
+  },
+  actions: {
+    setNoteData(myCollectNoteData) {
+      this.myCollectNoteData = myCollectNoteData
+    }
+  },
+  persist: true,
+})
+
+//我点赞的笔记
+export const myLikeNoteStore = defineStore('myLikeNote', {
+  state: () => {
+    return {
+      myLikeNoteData: []
+    }
+  },
+  actions: {
+    setNoteData(myLikeNoteData) {
+      this.myLikeNoteData = myLikeNoteData
+    }
+  },
+  persist: true,
+})
+
 
 export const userIdStore = defineStore('user',{
   state: () => ({
