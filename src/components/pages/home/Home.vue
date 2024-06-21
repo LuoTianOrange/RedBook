@@ -38,12 +38,41 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted } from 'vue'
+import { computed, ref, onMounted ,watchEffect,onUnmounted} from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import useNoteStore from '../../../stores/store'
 
 let isLoading = ref(true)
+
+// 用来存储当前窗口宽度的引用  
+const windowWidth = ref(window.innerWidth); 
+
+// 监听窗口大小变化  
+const handleResize = () => {  
+  windowWidth.value = window.innerWidth;  
+};  
+  
+// 组件挂载时添加事件监听器  
+onMounted(() => {  
+  window.addEventListener('resize', handleResize);  
+});  
+  
+// 组件卸载时移除事件监听器  
+onUnmounted(() => {  
+  window.removeEventListener('resize', handleResize);  
+});
+
+// 计算属性，根据窗口宽度计算每行显示的元素数量
+const groupSize = computed(() => {  
+  if (windowWidth.value >= 1200) {  
+    return 5; // 宽屏显示时，每行4个元素  
+  } else if (windowWidth.value >= 900) {  
+    return 4; // 中屏显示时，每行3个元素  
+  } else {  
+    return 3; // 窄屏显示时，每行2个元素  
+  }  
+});
 
 //导航点中时变背景色
 const userLikeSel = ref(1)
@@ -58,7 +87,27 @@ const userLikeNav = [
   }, {
     no: 2,
     name: '美食'
-  }]
+  },
+  {
+    no: 3,
+    name: '宠物'
+  },
+  {
+    no: 4,
+    name: '影视'
+  },
+  {
+    no: 5,
+    name: '旅行'
+  },
+  {
+    no: 6,
+    name: '游戏'
+  },
+  {
+    no: 7,
+    name: '壁纸'
+  },]
 
 //存放笔记的数组
 let noteStore = ref([])
@@ -71,22 +120,54 @@ axios.get('/api/note/notes').then((response) => {
   console.error(error)
 })
 
-
 const groupedItems = computed(() => {
   let groups = [];
 
-  // 每组元素数
-  let groupSize = 3;
+// 每组元素数
+let groupSize = 3;
 
-  if (groups.length % 2 == 0 && groups.length % 3 == 0) {
-    groupSize = 3;
-  } else if (groups.length % 2 == 0 && groups.length % 3 != 0) {
-    groupSize = 2;
+if (groups.length % 2 == 0 && groups.length % 3 == 0) {
+  groupSize = 3;
+} else if (groups.length % 2 == 0 && groups.length % 3 != 0) {
+  groupSize = 2;
+}
+for (let i = 0; i < noteStore.value.length; i += groupSize) {
+  groups.push(noteStore.value.slice(i, i + groupSize));
+}
+return groups;
+
+// 根据userLikeSel过滤笔记  
+const filteredNotes = noteStore.value.filter(note => {  
+  const noteType = note.note.type; // 假设笔记的类型存储在note.note.type中  
+  switch (userLikeSel.value) {  
+    case 1:  
+      // '推荐'类型包含所有笔记  
+      return true;  
+    case 2:  
+      // '美食'类型  
+      return noteType === '美食';  
+    case 3:  
+      // '宠物'类型  
+      return noteType === '宠物';  
+    case 4:  
+      // '影视'类型  
+      return noteType === '影视';  
+    case 5:  
+      // '旅行'类型  
+      return noteType === '旅行';  
+    case 6:  
+      // '游戏'类型  
+      return noteType === '游戏';  
+    case 7:  
+      // '壁纸'类型  
+      return noteType === '壁纸';  
+    // ... 可以继续添加其他类型的处理  
+    default:  
+      // 如果userLikeSel.value不是一个有效的选项，则返回false  
+      return false;  
   }
-  for (let i = 0; i < noteStore.value.length; i += groupSize) {
-    groups.push(noteStore.value.slice(i, i + groupSize));
-  }
-  return groups;
+  });  
+
 })
 
 //跳转笔记页面
