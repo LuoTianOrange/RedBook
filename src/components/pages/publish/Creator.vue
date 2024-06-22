@@ -70,7 +70,9 @@ const typeStore = [
     "type": "游戏"
   }
 ]
-
+// 创建一个响应式的 user 引用  
+const user = ref(null)
+const files=ref('')
 //图片上传
 const handleSuccess = (file) => {
   console.log(file);
@@ -91,11 +93,12 @@ const handleUpload = (file, filelist) => {
 const uploadFile = (files) => {
   const storedUser = localStorage.getItem('user')
   user.value = JSON.parse(storedUser)
+
   const formData = new FormData()
   pictureList.value.forEach((file) => {
     formData.append('files', file.raw);
   });
-  formData.append('userId', user.value.userData.id)
+  formData.append('user_id',user.value.userData.id)
   formData.append('title', title.value)
   formData.append('content', content.value)
   formData.append('type', selectValue.value)
