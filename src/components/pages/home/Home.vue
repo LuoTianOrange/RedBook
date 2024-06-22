@@ -66,11 +66,11 @@ onUnmounted(() => {
 // 计算属性，根据窗口宽度计算每行显示的元素数量
 const groupSize = computed(() => {  
   if (windowWidth.value >= 1200) {  
-    return 5; // 宽屏显示时，每行4个元素  
+    return 6; // 宽屏显示时，每行4个元素  
   } else if (windowWidth.value >= 900) {  
-    return 4; // 中屏显示时，每行3个元素  
+    return 5; // 中屏显示时，每行3个元素  
   } else {  
-    return 3; // 窄屏显示时，每行2个元素  
+    return 4; // 窄屏显示时，每行2个元素  
   }  
 });
 
@@ -123,19 +123,6 @@ axios.get('/api/note/notes').then((response) => {
 const groupedItems = computed(() => {
   let groups = [];
 
-// 每组元素数
-let groupSize = 3;
-
-if (groups.length % 2 == 0 && groups.length % 3 == 0) {
-  groupSize = 3;
-} else if (groups.length % 2 == 0 && groups.length % 3 != 0) {
-  groupSize = 2;
-}
-for (let i = 0; i < noteStore.value.length; i += groupSize) {
-  groups.push(noteStore.value.slice(i, i + groupSize));
-}
-return groups;
-
 // 根据userLikeSel过滤笔记  
 const filteredNotes = noteStore.value.filter(note => {  
   const noteType = note.note.type; // 假设笔记的类型存储在note.note.type中  
@@ -167,6 +154,20 @@ const filteredNotes = noteStore.value.filter(note => {
       return false;  
   }
   });  
+
+// 每组元素数
+let groupSize = 3;
+
+if (groups.length % 2 == 0 && groups.length % 3 == 0) {
+  groupSize = 3;
+} else if (groups.length % 2 == 0 && groups.length % 3 != 0) {
+  groupSize = 2;
+}
+for (let i = 0; i < noteStore.value.length; i += groupSize) {
+  groups.push(filteredNotes.slice(i, i + groupSize));
+}
+return groups;
+
 
 })
 
