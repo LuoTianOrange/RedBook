@@ -83,8 +83,7 @@ function handleBeforeUpload(file) {
   files.push(file)
   return false
 }
-const user = ref(null)
-const files = ref('')
+
 const pictureList = ref([])
 const handleUpload = (file, filelist) => {
   pictureList.value = filelist
