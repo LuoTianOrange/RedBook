@@ -5,8 +5,8 @@
         <div class="manage-title">笔记管理</div>
         <div class="menu-container">
           <!--菜单-->
-          <el-menu mode="horizontal" :default-active="activeIndex" class="manage-nav">
-            <el-menu-item index="1">全部笔记</el-menu-item>
+          <el-menu mode="horizontal" :default-active="activeIndex" @select="handleSelect" class="manage-nav">
+            <el-menu-item index="1" @click="">全部笔记</el-menu-item>
             <el-menu-item index="2">已发布</el-menu-item>
             <el-menu-item index="3">审核中</el-menu-item>
             <el-menu-item index="4">未通过</el-menu-item>
@@ -16,9 +16,9 @@
         <!--笔记-->
         <div class="note-flex">
           <div v-for="i in displayedNotes" :key="i.id" class="note-item">
-            <div :style="{ backgroundImage: `url(${i.noteCover})` }" class="note-image"></div>
+            <div :style="{ backgroundImage: `url(${i.note.noteCover})` }" class="note-image"></div>
             <div class="note-content">
-              <div class="note-title">{{ i.title }}</div>
+              <div class="note-title">{{ i.note.title }}</div>
               <div class="note-count-box">
                 <div class="note-count-flex">
                   <comment theme="filled" size="16" fill="#999" />
@@ -49,9 +49,13 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, ref, computed, watchEffect } from 'vue'
 import { Comment, Like, Star } from '@icon-park/vue-next'
-const activeIndex = ref('1')
+import { managerAllStore, managerPassStore, managerNowStore, managerNoPassStore } from '../../../stores/manager'
+import axios from 'axios'
+
+
+const activeIndex = ref(1)
 
 const manageMenu = [{
   id: 1,
@@ -61,123 +65,102 @@ const manageMenu = [{
 },
 ]
 //用于接收笔记的响应式数组
-const noteStore = ref([
-  {
-    "id": 2046975644,
-    "user_id": 906190192,
-    "title": "春",
-    "content": "cillum ut",
-    "noteCover": "/images/39eb38.jpg",
-    "type": "ut dolor L",
-    "urls": "consequat commodo velit do Excepteur",
-    "picture_count": 863963589,
-    "like_count": -1953051395,
-    "like_status": true,
-    "collection_status": true,
-    "collection_count": 1130386215,
-    "comment_count": 673008498
-  },
-  {
-    "id": 2046975644,
-    "user_id": 906190192,
-    "title": "夏",
-    "content": "cillum ut",
-    "noteCover": "/images/20240415_112933.jpg",
-    "type": "ut dolor L",
-    "urls": "consequat commodo velit do Excepteur",
-    "picture_count": 863963589,
-    "like_count": -1953051395,
-    "like_status": true,
-    "collection_status": true,
-    "collection_count": 1130386215,
-    "comment_count": 673008498
-  },
-  {
-    "id": 2046975644,
-    "user_id": 906190192,
-    "title": "夏",
-    "content": "cillum ut",
-    "noteCover": "/images/20240415_112933.jpg",
-    "type": "ut dolor L",
-    "urls": "consequat commodo velit do Excepteur",
-    "picture_count": 863963589,
-    "like_count": -1953051395,
-    "like_status": true,
-    "collection_status": true,
-    "collection_count": 1130386215,
-    "comment_count": 673008498
-  },
-  {
-    "id": 2046975644,
-    "user_id": 906190192,
-    "title": "Miku",
-    "content": "cillum ut",
-    "noteCover": "/images/20240312_192636.jpg",
-    "type": "ut dolor L",
-    "urls": "consequat commodo velit do Excepteur",
-    "picture_count": 863963589,
-    "like_count": -1953051395,
-    "like_status": true,
-    "collection_status": true,
-    "collection_count": 1130386215,
-    "comment_count": 673008498
-  },
-  {
-    "id": 2046975644,
-    "user_id": 906190192,
-    "title": "Miku",
-    "content": "cillum ut",
-    "noteCover": "/images/20240312_192636.jpg",
-    "type": "ut dolor L",
-    "urls": "consequat commodo velit do Excepteur",
-    "picture_count": 863963589,
-    "like_count": -1953051395,
-    "like_status": true,
-    "collection_status": true,
-    "collection_count": 1130386215,
-    "comment_count": 673008498
-  },
-  {
-    "id": 2046975644,
-    "user_id": 906190192,
-    "title": "Miku",
-    "content": "cillum ut",
-    "noteCover": "/images/20240312_192636.jpg",
-    "type": "ut dolor L",
-    "urls": "consequat commodo velit do Excepteur",
-    "picture_count": 863963589,
-    "like_count": -1953051395,
-    "like_status": true,
-    "collection_status": true,
-    "collection_count": 1130386215,
-    "comment_count": 673008498
-  },
-  {
-    "id": 2046975644,
-    "user_id": 906190192,
-    "title": "夏",
-    "content": "cillum ut",
-    "noteCover": "/images/20240415_112933.jpg",
-    "type": "ut dolor L",
-    "urls": "consequat commodo velit do Excepteur",
-    "picture_count": 863963589,
-    "like_count": -1953051395,
-    "like_status": true,
-    "collection_status": true,
-    "collection_count": 1130386215,
-    "comment_count": 673008498
-  },
-])
+const ManagerallStore = ref([])
+const ManagerpassStore = ref([])
+const ManagernowStore = ref([])
+const ManagernoPassStore = ref([])
+
+function handleSelect(index) {
+  // 在这里，你可以根据 index 更新其他状态或执行其他操作  
+  switch (index) {
+    case '1': // 全部 
+      notecount.value = ManagerallStore.value.length
+      break;
+    case '2': // 已通过  
+      notecount.value = ManagerpassStore.value.length
+      break;
+    case '3': // 审核中  
+      notecount.value = ManagernowStore.value.length
+      break;
+    case '4': // 未通过  
+      notecount.value = ManagernoPassStore.value.length
+      break;
+  }
+  console.log("notecount:", notecount.value);
+  return notecount;
+}
+
 //笔记数量，用onMounted是为了在页面加载前就获取笔记数量
-const notecount = ref(0)
+let notecount = ref(0)
 /**
  * 当组件被挂载到 DOM 后，计算 noteStore 中元素的个数，并将结果存储到 notecount 中。
  * @returns {Ref<number>} 返回一个响应式引用，他的值是 noteStore 中元素的个数。
  */
 onMounted(() => {
-  notecount.value = noteStore.value.length
-  console.log(notecount)
-  return notecount
+
+
+})
+const test = (e) => {
+  console.log("activeIndex:", e);
+  console.log("ManagerallStore.lenth", ManagerallStore.value.length);
+}
+
+
+// 创建一个响应式的 user 引用  
+const user = ref(null)
+const managerallStore = managerAllStore()
+const managerpassStore = managerPassStore()
+const managernowStore = managerNowStore()
+const managernoPassStore = managerNoPassStore()
+
+
+
+onMounted(() => {
+  const storedUser = localStorage.getItem('user')
+  user.value = JSON.parse(storedUser)
+  console.log(user.value.userData.id)
+  //获取个人笔记信息
+  axios.get(`/api/note/allNotes/${user.value.userData.id}`)
+    .then((response) => {
+      managerallStore.setNoteData(response.data.data)
+      ManagerallStore.value = response.data.data
+      console.log(ManagerallStore.value)
+    }).catch((error) => {
+      console.error(error)
+    })
+
+  //获取已通过笔记信息
+  axios.get(`/api/note/selectNotes/${user.value.userData.id}/approved`)
+    .then((response) => {
+      managerpassStore.setNoteData(response.data.data)
+      ManagerpassStore.value = response.data.data
+      console.log(ManagerpassStore.value)
+    }).catch((error) => {
+      console.error(error)
+    })
+
+
+  //获取审核中笔记信息
+  axios.get(`/api/note/selectNotes/${user.value.userData.id}/under_review`)
+    .then((response) => {
+      managernowStore.setNoteData(response.data.data)
+      ManagernowStore.value = response.data.data
+      console.log(ManagernowStore.value)
+    }).catch((error) => {
+      console.error(error)
+    })
+
+
+  //获取未通过笔记信息
+  axios.get(`/api/note/selectNotes/${user.value.userData.id}/rejected`)
+    .then((response) => {
+      managernoPassStore.setNoteData(response.data.data)
+      ManagernoPassStore.value = response.data.data
+      console.log(ManagernoPassStore.value)
+    }).catch((error) => {
+      console.error(error)
+    })
+
 })
 
 // 存储页当前页码
@@ -189,7 +172,23 @@ const pageSize = 3
 const displayedNotes = computed(() => {
   const start = (currentPage.value - 1) * pageSize
   const end = start + pageSize
-  return noteStore.value.slice(start, end)
+  let notes;
+  switch (activeIndex.value) {
+    case 1: // 全部 
+      notes = ManagerallStore.value.slice(start, end)
+      break;
+    case 2: // 已通过  
+      notes = ManagerpassStore.value.slice(start, end)
+      break;
+    case 3: // 审核中  
+      notes = ManagernowStore.value.slice(start, end)
+      break;
+    case 4: // 未通过  
+      notes = ManagernoPassStore.value.slice(start, end)
+      break;
+    default:
+      notes = []; // 默认返回空数组    
+  }return notes;
 })
 
 // 当前页码改变时的处理函数
@@ -202,7 +201,21 @@ const handleCurrentChange = (newPage) => {
  
  */
 const isLastPage = computed(() => {
-  return currentPage.value * pageSize >= noteStore.value.length
+  switch (activeIndex.value) {
+    case 1: // 全部 
+      currentPage.value * pageSize >= ManagerallStore.value.length
+      break;
+    case 2: // 已通过  
+      currentPage.value * pageSize >= ManagerpassStore.value.length
+      break;
+    case 3: // 审核中  
+      currentPage.value * pageSize >= ManagernowStore.value.length
+      break;
+    case 4: // 未通过  
+      currentPage.value * pageSize >= ManagernoPassStore.value.length
+      break;
+  }return currentPage.value
+
 })
 
 </script>
@@ -212,12 +225,12 @@ const isLastPage = computed(() => {
 
 .bg {
   position: absolute;
-    height: 100%;
-    background: #DCDFE6;
-    z-index: -999;
-    width: 100%;
-    top: 0;
-    right: 0;
+  height: 100%;
+  background: #DCDFE6;
+  z-index: -999;
+  width: 100%;
+  top: 0;
+  right: 0;
 }
 
 /* main */

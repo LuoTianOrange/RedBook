@@ -24,7 +24,7 @@
             :autosize="{ minRows: 2, maxRows: 4 }" warp="soft" type="textarea"></el-input>
           <div>
             <el-select v-model="selectValue" class="input" style="width: 200px;">
-              <el-option v-for="i in topicStore" :key="i.id" :label="i.topic" :value="i.topic"></el-option>
+              <el-option v-for="i in typeStore" :key="i.id" :label="i.type" :value="i.type"></el-option>
             </el-select>
           </div>
           <div style="margin-top: 40px;">
@@ -42,34 +42,36 @@
 <script setup>
 import axios from 'axios'
 import { ref, reactive } from 'vue'
-
+import {userIdStore} from '../../../stores/user'
 const title = ref('')
 const content = ref('')
 const selectValue = ref('')
 //话题下拉菜单
-const topicStore = [
+const typeStore = [
   {
     "id": 1,
-    "topic": "推荐"
+    "type": "推荐"
   },
   {
     "id": 2,
-    "topic": "美食"
+    "type": "美食"
   },
   {
     "id": 3,
-    "topic": "穿搭"
+    "type": "穿搭"
   },
   {
     "id": 4,
-    "topic": "宠物"
+    "type": "宠物"
   },
   {
     "id": 5,
-    "topic": "游戏"
+    "type": "游戏"
   }
 ]
-
+// 创建一个响应式的 user 引用  
+const user = ref(null)
+const files=ref('')
 //图片上传
 const handleSuccess = (file) => {
   console.log(file);
@@ -87,14 +89,17 @@ const handleUpload = (file, filelist) => {
 }
 
 const uploadFile = (files) => {
+  const storedUser = localStorage.getItem('user')
+  user.value = JSON.parse(storedUser)
+  console.log(user.value)
   const formData = new FormData()
   pictureList.value.forEach((file) => {
     formData.append('files', file.raw);
   });
-
+  formData.append('user_id',user.value.userData.id)
   formData.append('title', title.value)
   formData.append('content', content.value)
-  formData.append('topic', selectValue.value)
+  formData.append('type', selectValue.value)
   for (let pair of formData.entries()) {
     console.log(pair[0] + ', ' + pair[1]);
   }
