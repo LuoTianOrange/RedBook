@@ -43,6 +43,7 @@
 import axios from 'axios'
 import { ref, reactive } from 'vue'
 import {userIdStore} from '../../../stores/user'
+
 const title = ref('')
 const content = ref('')
 const selectValue = ref('')
@@ -82,7 +83,8 @@ function handleBeforeUpload(file) {
   files.push(file)
   return false
 }
-
+const user = ref(null)
+const files = ref('')
 const pictureList = ref([])
 const handleUpload = (file, filelist) => {
   pictureList.value = filelist
@@ -91,7 +93,7 @@ const handleUpload = (file, filelist) => {
 const uploadFile = (files) => {
   const storedUser = localStorage.getItem('user')
   user.value = JSON.parse(storedUser)
-  console.log(user.value)
+
   const formData = new FormData()
   pictureList.value.forEach((file) => {
     formData.append('files', file.raw);
