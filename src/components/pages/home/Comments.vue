@@ -22,40 +22,21 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import axios from "axios";
+const store = ref([])
 
-const store = ref([
-  {
-    "id": -2147483648,
-    "note_id": -2147483648,
-    "note_uid": -2147483648,
-    "user_id": -2147483648,
-    "reply_uid": -2147483648,
-    "replyId": "请根据该id去请求对应的评论数据",
-    "content": "string",
-    "comment_twocount": -2147483648,
-    "like_count": -2147483648,
-    "updateDate": "2019-08-24T14:15:22",
-    "username": "名字",
-    "avatar": "string",
-    "note_cover": "string"
-  },
-  {
-    "id": -2147483648,
-    "note_id": -2147483648,
-    "note_uid": -2147483648,
-    "user_id": -2147483648,
-    "reply_uid": -2147483648,
-    "replyId": "请根据该id去请求对应的评论数据",
-    "content": "string",
-    "comment_twocount": -2147483648,
-    "like_count": -2147483648,
-    "updateDate": "2019-08-24T14:15:22",
-    "username": "名字",
-    "avatar": "string",
-    "note_cover": "string"
-  },
-])
+const getCommentNotice = (publish_id) => axios.get(`/api/like/getLikeInform/${publish_id}`)
+.then((res)=>{
+  store.value = res.data;
+})
+.catch((err) => {
+  console.log(err);
+})
+
+onMounted(()=>{
+  getCommentNotice();
+})
 
 //用于分离点赞和评论的函数
 
