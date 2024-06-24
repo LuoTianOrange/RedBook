@@ -34,7 +34,8 @@ const MenuSelectedNav = [
     },
     {
         no: 3,
-        name: '新增关注'
+        name: '新增关注',
+        router: 'Follows'
     }]
 </script>
 

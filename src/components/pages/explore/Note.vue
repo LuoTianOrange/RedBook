@@ -141,15 +141,25 @@ onMounted(async () => {
     //将封面数据传入图片预览数值
     srcList.value.push(noteData.value.noteCover)
 
-    //处理评论数据
+    //处理评论数据，分离主评论和回复评论
     watchEffect(() => {
-        let mainComments = commentData.value.filter(item => item.comment.replyUid <= 0);
-        let replyComments = commentData.value.filter(item => item.comment.replyUid > 0);
+        let convertedCommentData = commentData.value.map(item => {
+            return {
+                ...item,
+                comment: {
+                    ...item.comment,
+                    noteId: parseInt(item.comment.noteId),
+                    replyUid: parseInt(item.comment.replyUid)
+                }
+            };
+        });
+        let mainComments = convertedCommentData.filter(item => item.comment.replyUid <= 0);
+        let replyComments = convertedCommentData.filter(item => item.comment.replyUid > 0);
         console.log("mainComments:", mainComments, "replyComments:", replyComments);
         CSData.value = mainComments.map(mainComment => {
             return {
                 comment: mainComment,
-                sub_reply: replyComments.filter(replyComment => replyComment.comment.replyUid === mainComment.comment.id)
+                sub_reply: replyComments.filter(replyComment => replyComment.comment.replyUid === mainComment.comment.noteId)
             };
         });
     });
@@ -159,7 +169,10 @@ onMounted(async () => {
 })
 //去除时间中间的T字符并替换成空格
 const formatDate = (dateString) => {
-    return dateString.replace("T", " ");
+  if (dateString === undefined) {
+    return "";
+  }
+  return dateString.replace("T", " ");
 }
 //回复框
 const replyinput = ref('')
