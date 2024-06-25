@@ -45,20 +45,25 @@
                                 <div>我</div>
                             </div>
                         </router-link>
-                        <div  class="menu-item-login" v-show="!isLoggedIn" @click="LoginVisible = true">
+                        <div class="menu-item-login" v-show="!isLoggedIn" @click="LoginVisible = true">
                             <div class="menu-item-box" style="margin: 0 auto;">
                                 <div>登录</div>
                             </div>
                         </div>
                         <div style="margin-top: auto;"></div>
-                        <div class="menu-item" @click="ChangeColor(5)" :class="{ 'isSelect': selected === 5 }">
+                        <el-dropdown class="menu-item">
+                            <template #dropdown>
+                                <el-dropdown-menu>
+                                    <el-dropdown-item>退出登录</el-dropdown-item>
+                                </el-dropdown-menu>
+                            </template>
                             <div class="menu-item-box">
                                 <el-icon style="margin-right: 15px;">
                                     <MoreFilled />
                                 </el-icon>
                                 <div>更多</div>
                             </div>
-                        </div>
+                        </el-dropdown>
                     </el-aside>
                     <router-view></router-view>
                 </el-container>
@@ -77,12 +82,14 @@
                         <div style="flex: 1;" class="tb-center el-login-right">
                             <div>账号登录</div>
                             <div class="login-input-box">
-                                <el-input  class="input" v-model="account" autocomplete="off" placeholder="输入账号"  @blur="validateForm" />
-                                    <template slot="append">  
-                                        <span v-if="errorMessage" class="error-message">{{ errorMessage }}</span>   
-                                        </template>  
-                                
-                                <el-input  class="input" v-model="password" autocomplete="off" placeholder="输入密码"></el-input>
+                                <el-input class="input" v-model="account" autocomplete="off" placeholder="输入账号"
+                                    @blur="validateForm" />
+                                <template slot="append">
+                                    <span v-if="errorMessage" class="error-message">{{ errorMessage }}</span>
+                                </template>
+
+                                <el-input class="input" v-model="password" autocomplete="off"
+                                    placeholder="输入密码"></el-input>
                                 <div class="login-btn">
                                     <div class="menu-item-box" style="margin: 0 auto;">
                                         <div @click="login">登录</div>
@@ -90,7 +97,8 @@
                                 </div>
                                 <div class="rl-center login-pwd">
                                     <div>忘记密码</div>
-                                    <router-link :to="{ name: 'Register' }" style="margin-left: 20px;">注册账号</router-link>
+                                    <router-link :to="{ name: 'Register' }"
+                                        style="margin-left: 20px;">注册账号</router-link>
                                 </div>
                             </div>
                         </div>
@@ -115,60 +123,56 @@
 </template>
 
 <script setup>
-import { computed, ref, reactive, onUnmounted} from 'vue'
+import { computed, ref, reactive, onUnmounted } from 'vue'
 import { Search, House } from '@element-plus/icons-vue'
 import Header from '../../tools/Header.vue'
 import axios from 'axios'
-import {userIdStore} from '../../../stores/user';  
+import { userIdStore } from '../../../stores/user';
 
 let info = ref(null)
 let imgsrc = new URL(`../../assets/images/${name}.png`, import.meta.url).href
 const searchbox = ref('');
-const account = ref('');  
-const password = ref(''); 
+const account = ref('');
+const password = ref('');
 const errorMessage = ref('');
 const userStore = userIdStore();
 
 
 
-const login = async () => {  
-      try {  
-        const response = await axios.get(`/api/user/login`, {      
-          params: {  
-            username: account.value, 
-            password: password.value,  
-          },     
-        });  
-        if (response.data.msg == null) {  
+const login = async () => {
+    try {
+        const response = await axios.get(`/api/user/login`, {
+            params: {
+                username: account.value,
+                password: password.value,
+            },
+        });
+        if (response.data.msg == null) {
             LoginVisible.value = false
             isLoggedIn.value = true
+            console.log(isLoggedIn.value)
             userStore.setUserData(response.data.data); // 更新全局状态中的用户id   
-            
-            
-            
-            
-            
-        } else {  
-          // 登录失败处理逻辑  
-          alert('账号或密码错误！');  
-        }  
-      } catch (error) {  
+        } else {
+            // 登录失败处理逻辑  
+            alert('账号或密码错误！');
+        }
+    } catch (error) {
         // 捕获API请求中的错误  
-        console.error('登录时发生错误:', error);  
-        alert('登录失败，请重试！');  
-      }     
+        console.error('登录时发生错误:', error);
+        alert('登录失败，请重试！');
+    }
 };
 
 // const checkLoginStatus = () => {  
 //       const id = localStorage.getItem('user');  
 //       if (id) {  
 //         isLoggedIn.value = true; 
-        
+
 //         // 在这里你可以执行其他登录后的初始化操作，如从服务器获取用户信息等  
 //       }  
 //     };  
 
-    
+
 // onmounted(checkLoginStatus); // 在组件挂载时检查登录状态
 
 // const validateForm = () => {  
@@ -225,7 +229,7 @@ const MenuBottom = [
 //初始化登录弹窗
 const LoginVisible = ref(false)
 
-const  isLoggedIn = ref(false)
+const isLoggedIn = ref(false)
 
 //检查是否弹窗
 const CheckLogin = (item) => {
@@ -236,11 +240,10 @@ const CheckLogin = (item) => {
 </script>
 
 <style scoped>
-
-.error-message {  
-  color: red;  
-  /* 其他样式 */  
-}  
+.error-message {
+    color: red;
+    /* 其他样式 */
+}
 
 /*滚动条隐藏*/
 ::-webkit-scrollbar {
@@ -519,8 +522,9 @@ const CheckLogin = (item) => {
     font-size: 14px;
     color: #909399;
 }
-:deep(.el-dialog){
-    max-width: 700px!important;
-    min-width: 500px!important;
+
+:deep(.el-dialog) {
+    max-width: 700px !important;
+    min-width: 500px !important;
 }
 </style>
