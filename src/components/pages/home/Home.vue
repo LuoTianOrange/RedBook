@@ -50,7 +50,7 @@
           col-spacing="20"
           :break-at="{ 900: 3, 600: 2, 300: 1 }"
         >
-        <div class="main-item" v-for="i in noteStore" :key="i.id" v-if="!isLoading">
+        <div class="main-item" v-for="i in groupedItems" :key="i.id" v-if="!isLoading">
               <el-image style="object-fit: cover;width: 100%;" :src="i.note.noteCover" @click="goToNote(i)"
                 class="main-item-top">
                 <template #error>
