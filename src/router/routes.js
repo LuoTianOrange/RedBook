@@ -57,12 +57,12 @@ const routes = [
         ]
     },
     {
-        path: '/publish',
+        path: '/',
         name: 'Publish',
         title: '发布',
         component: () => import('../components/pages/publish/Publish.vue'),
         // meta: { requiresAuth: true },
-        redirect: '/publish/creator',
+        redirect: '/creator',
         children: [
             {
                 path: 'creator',
@@ -83,7 +83,7 @@ const routes = [
         name: 'Register',
         title: '注册',
         component: () => import('../components/pages/home/Register.vue'),
-    }
+    },
 
 ]
 export default routes
