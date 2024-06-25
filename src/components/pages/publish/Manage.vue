@@ -16,7 +16,7 @@
         <!--笔记-->
         <div class="note-flex">
           <div v-for="i in displayedNotes" :key="i.id" class="note-item">
-            <div :style="{ backgroundImage: `url(${i.note.noteCover})` }" class="note-image"></div>
+            <div :style="{ backgroundImage: `url(${i.note.noteCover})` }" class="note-image"  @click="goToNote(i)"></div>
             <div class="note-content">
               <div class="note-title">{{ i.note.title }}</div>
               <div class="note-count-box">
@@ -53,7 +53,17 @@ import { onMounted, ref, computed, watchEffect } from 'vue'
 import { Comment, Like, Star } from '@icon-park/vue-next'
 import { managerAllStore, managerPassStore, managerNowStore, managerNoPassStore } from '../../../stores/manager'
 import axios from 'axios'
+import { useRouter } from 'vue-router'
+import useNoteStore from '../../../stores/store'
 
+
+//跳转笔记页面
+const noteList = useNoteStore()
+const router = useRouter()
+const goToNote = (noteData) => {
+  noteList.setNoteData(noteData)
+  router.push(`note/${noteData.note.id}`)
+}
 
 const activeIndex = ref(1)
 
@@ -70,24 +80,30 @@ const ManagerpassStore = ref([])
 const ManagernowStore = ref([])
 const ManagernoPassStore = ref([])
 
+let notes = ref([])
+
 function handleSelect(index) {
   // 在这里，你可以根据 index 更新其他状态或执行其他操作  
   switch (index) {
     case '1': // 全部 
       notecount.value = ManagerallStore.value.length
+      notes.value = ManagerallStore.value
       break;
     case '2': // 已通过  
       notecount.value = ManagerpassStore.value.length
+      notes.value = ManagerpassStore.value
       break;
     case '3': // 审核中  
       notecount.value = ManagernowStore.value.length
+      notes.value = ManagernowStore.value
       break;
     case '4': // 未通过  
       notecount.value = ManagernoPassStore.value.length
+      notes.value = ManagernoPassStore.value
       break;
   }
-  console.log("notecount:", notecount.value);
-  return notecount;
+  console.log("notes:",notes)
+  return notecount,notes;
 }
 
 //笔记数量，用onMounted是为了在页面加载前就获取笔记数量
@@ -96,15 +112,11 @@ let notecount = ref(0)
  * 当组件被挂载到 DOM 后，计算 noteStore 中元素的个数，并将结果存储到 notecount 中。
  * @returns {Ref<number>} 返回一个响应式引用，他的值是 noteStore 中元素的个数。
  */
-onMounted(() => {
 
-
-})
 const test = (e) => {
   console.log("activeIndex:", e);
   console.log("ManagerallStore.lenth", ManagerallStore.value.length);
 }
-
 
 // 创建一个响应式的 user 引用  
 const user = ref(null)
@@ -112,8 +124,6 @@ const managerallStore = managerAllStore()
 const managerpassStore = managerPassStore()
 const managernowStore = managerNowStore()
 const managernoPassStore = managerNoPassStore()
-
-
 
 onMounted(() => {
   const storedUser = localStorage.getItem('user')
@@ -139,7 +149,6 @@ onMounted(() => {
       console.error(error)
     })
 
-
   //获取审核中笔记信息
   axios.get(`/api/note/selectNotes/${user.value.userData.id}/under_review`)
     .then((response) => {
@@ -150,7 +159,6 @@ onMounted(() => {
       console.error(error)
     })
 
-
   //获取未通过笔记信息
   axios.get(`/api/note/selectNotes/${user.value.userData.id}/rejected`)
     .then((response) => {
@@ -160,7 +168,6 @@ onMounted(() => {
     }).catch((error) => {
       console.error(error)
     })
-
 })
 
 // 存储页当前页码
@@ -172,23 +179,8 @@ const pageSize = 3
 const displayedNotes = computed(() => {
   const start = (currentPage.value - 1) * pageSize
   const end = start + pageSize
-  let notes;
-  switch (activeIndex.value) {
-    case 1: // 全部 
-      notes = ManagerallStore.value.slice(start, end)
-      break;
-    case 2: // 已通过  
-      notes = ManagerpassStore.value.slice(start, end)
-      break;
-    case 3: // 审核中  
-      notes = ManagernowStore.value.slice(start, end)
-      break;
-    case 4: // 未通过  
-      notes = ManagernoPassStore.value.slice(start, end)
-      break;
-    default:
-      notes = []; // 默认返回空数组    
-  }return notes;
+  console.log(notes)
+  return notes.value.slice(start,end)
 })
 
 // 当前页码改变时的处理函数
@@ -215,14 +207,12 @@ const isLastPage = computed(() => {
       currentPage.value * pageSize >= ManagernoPassStore.value.length
       break;
   }return currentPage.value
-
 })
 
 </script>
 
 <style scoped>
 /* 背景 */
-
 .bg {
   position: absolute;
   height: 100%;

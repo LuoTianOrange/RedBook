@@ -75,15 +75,15 @@
                         style="display: flex;flex-direction: row-reverse;justify-content: space-between;margin-top: 10px;">
                         <div>
                             <el-button @click="replyinput = ''" round class="button">取消</el-button>
-                            <el-button :disabled="!replyinput" type="primary" round>发送</el-button>
+                            <el-button :disabled="!replyinput" type="primary" round @click="send">发送</el-button>
                         </div>
                         <div class="rl-center" style="color: #333;">
                             <div class="rl-center" style="margin-right: 10px;">
-                                <i-like style="margin-right: 5px;" theme="outline" size="22" fill="#333" />
+                                <i-like style="margin-right: 5px;" theme="outline" size="22" :fill="getFillColor()"  @click="Like"/>
                                 {{ noteData.likeCount }}
                             </div>
                             <div class="rl-center">
-                                <i-star style="margin-right: 5px;" theme="outline" size="22" fill="#333" />
+                                <i-star style="margin-right: 5px;" theme="outline" size="22" :fill="getFillColor2()"  @click="Collect"/>
                                 {{ noteData.collectionCount }}
                             </div>
                         </div>
@@ -97,8 +97,56 @@
 <script setup>
 import { ref, onMounted, computed, watchEffect } from 'vue';
 import { useCommentStore, useNoteStore } from '../../../stores/store'
+import { LikeNoteStore } from '../../../stores/like';
 import { storeToRefs } from 'pinia'
 import axios from 'axios'
+
+const user = ref(null)
+const likeNoteStore = LikeNoteStore()
+const likeNoteData = ref([])
+const likeStatus =ref(false)
+const note = ref(null)
+const storedUser = localStorage.getItem('note')
+note.value = JSON.parse(storedUser)
+// likeStatus.value = note.value.
+console.log("note:",note.value)
+
+const likenote = ref(null)
+const storedNote = localStorage.getItem('likeNote')
+likenote.value = JSON.parse(storedNote)
+console.log("likenote:",likenote.value)
+
+function getFillColor(likeStatus) {
+    if (likeStatus === true) {
+        return 'red';
+    } else {
+        return 'red';
+    }
+}
+
+function getFillColor2() {
+    return 'yellow';
+}
+
+const like_id = ref()
+
+function Like() {
+        likeStatus === true;
+        axios.post(`/api/like/addLikeWithNote/${user.value.userData.id}/${noteData.value.id}`)
+            .then((response) => {
+                if (response.status == 200) {
+                    axios.get(`/api/note/noteDetail/${noteData.value.id}`)
+                        .then((response) => {
+                            console.log(response.data.data)
+                            noteStore.setNoteData(response.data.data)
+                        }).catch((error) => {
+                            console.error(error)
+                        })
+                }
+            }).catch((error) => {
+                console.error(error)
+            }) 
+}
 
 const noteStore = useNoteStore()
 const noteData = ref([]);
@@ -122,9 +170,11 @@ onMounted(async () => {
     //获取笔记数据
     noteData.value = noteStore.noteData.note;
     info.value = storeToRefs(noteStore.noteData.note)
+    likeStatus.value = storeToRefs(noteStore.noteData.note.likeStatus)
+    console.log("likeStatus:",likeStatus.value)
     console.log("noteData:", noteData)
     //获取评论数据
-    console.log(noteData.value.id);
+  
     //处理评论时间
 
     axios.get(`/api/comment/commentList/${noteData.value.id}`)
@@ -154,6 +204,23 @@ onMounted(async () => {
         });
     });
     console.log("CSData:", CSData);
+
+
+    
+    const storedNote = localStorage.getItem('user')
+    user.value = JSON.parse(storedNote)
+    console.log("user:",user.value.userData.id)
+    axios.get(`/api/like/getLikeInform/${user.value.userData.id}`)
+        .then((response) => {
+            likeNoteStore.setNoteData(response.data.data)
+            // console.log(response.data.data)
+            const likes = response.data.data; 
+            const filteredLikes = likes.filter(like => like.value.likeRecord.dzId === noteData.value.id); 
+            likeNoteData.value = filteredLikes
+            console.log("filteredLikeNoteData:", likeNoteData.value); 
+        }).catch((error) => {
+            console.error(error)
+        })
 
     isLoading.value = false
 })
