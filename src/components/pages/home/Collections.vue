@@ -1,5 +1,5 @@
 <template>
-  <el-container v-if="!isLoading" v-loading="isloading">
+  <el-container v-if="!isLoading" v-loading="isLoading">
     <el-main class="el-main-css">
       <div v-for="i in currentPageData" class="main-item">
         <div>
@@ -14,12 +14,12 @@
         <div class="info">
           <div style="display: flex;justify-content: space-between;">
             <div style="display: flex;">
-              <div style="color: #3d465a;">{{ i.username }}</div>点赞了你的评论
+              <div style="color: #3d465a;">{{ i.username }}</div>点赞了你的笔记
             </div>
             <div class="time">{{ formatDate(i.likeRecord.updateDate) }}</div>
           </div>
           <div class="content">
-            {{ i.replyId }}
+            {{ i.noteTitle }}
           </div>
         </div>
       </div>
@@ -48,28 +48,36 @@ let currentPage = ref(1)
 const pageSize = 10
 const currentPageData = ref([])
 
-onMounted(() => {
+onMounted(async () => {
   try {
     const storedUser = localStorage.getItem('user')
     user.value = JSON.parse(storedUser)
     let user_id = user.value.userData.id;
-    //获取点赞通知
-    axios.get(`/api/like/getLikeInform/${user_id}`)
-      .then((res) => {
-        store.value = res.data.data;
-        noticeCount.value = store.value.length;
-        updateCurrentPageData();
-        console.log("res:", res.data);
-        console.log("store:", store.value);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-    if (store.value.length > 0) {
-      noticeCount.value = store.value.length;
-    }
-    //根据点赞id获取笔记标题
+    //获取笔记/点赞通知
+    const res = await axios.get(`/api/like/getLikeInform/${user_id}`)
+    store.value = res.data.data;
+    noticeCount.value = store.value.length;
 
+    // 根据 dz_id 获取笔记/点赞标题
+    const promises = store.value.map(item => {
+      let dz_id = item.likeRecord.dzId;
+      return axios.get(`/api/note/selectNoteById/${dz_id}`)
+        .then((res) => {
+          // console.log("res.data.note:", res.data.data[0].note.title);
+          if (res.data.data[0].note.title) {
+            item.noteTitle = res.data.data[0].note.title;
+            console.log("item:",item);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    });
+
+    await Promise.all(promises);
+    console.log("daziStore", store.value);
+
+    updateCurrentPageData();
     isLoading.value = false;
   } catch (error) {
     console.log(error);
