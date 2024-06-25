@@ -9,7 +9,7 @@
       </div>
       <!--内容展示部分-->
       <div style="max-height: calc(100vh - 190px);overflow: auto;">
-        <div class="main-container-flex">
+        <!-- <div class="main-container-flex">
           <div class="main-container" v-for="list in groupedItems">
             <div class="main-item" v-for="info in list" :key="info.id" v-if="!isLoading">
               <el-image style="object-fit: cover;width: 100%;" :src="info.note.noteCover" @click="goToNote(info)"
@@ -43,7 +43,45 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
+        <VueFlexWaterfall
+          align-content="center"
+          col="4"
+          col-spacing="20"
+          :break-at="{ 900: 3, 600: 2, 300: 1 }"
+        >
+        <div class="main-item" v-for="i in noteStore" :key="i.id" v-if="!isLoading">
+              <el-image style="object-fit: cover;width: 100%;" :src="i.note.noteCover" @click="goToNote(i)"
+                class="main-item-top">
+                <template #error>
+                  <div class="image-slot2">
+                    <el-icon><icon-picture /></el-icon>
+                  </div>
+                </template>
+              </el-image>
+              <div class="main-item-bottom">
+                <span style="margin-bottom: 8px;">{{ i.note.title }}</span>
+                <div style="display: flex;justify-content: space-between;margin-top: 8px;">
+                  <div style="display: flex;align-items: center;">
+                    <el-image style="margin-right: 5px;border-radius: 50%;width: 25px;height: 25px;overflow: hidden;"
+                      :src="i.avatar">
+                      <template #error>
+                        <div class="image-slot">
+                          <el-icon><icon-picture /></el-icon>
+                        </div>
+                      </template>
+                    </el-image>
+                    <span>{{ i.username }}</span>
+                  </div>
+                  <div style="display: flex;align-items: center;">
+                    <div style="margin-right: 5px;"><i-like theme="outline" size="20" fill="#333" />
+                    </div>
+                    <div>{{ i.note.likeCount }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </VueFlexWaterfall>
       </div>
     </el-main>
   </el-container>
@@ -55,6 +93,7 @@ import axios from 'axios'
 import { useRouter } from 'vue-router'
 import useNoteStore from '../../../stores/store'
 import { User as IconPicture } from '@element-plus/icons-vue'
+import { VueFlexWaterfall } from 'vue-flex-waterfall';
 
 let isLoading = ref(true)
 
@@ -168,7 +207,7 @@ const groupedItems = computed(() => {
   });
 
   // 每组元素数
-  let groupSize = 3;
+  let groupSize = 10;
 
   if (groups.length % 2 == 0 && groups.length % 3 == 0) {
     groupSize = 3;
@@ -312,7 +351,7 @@ const goToNote = (noteData) => {
   color: var(--el-text-color-secondary);
 }
 
-.image-slot2{
+.image-slot2 {
   display: flex;
   justify-content: center;
   align-items: center;
