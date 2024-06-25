@@ -31,6 +31,12 @@ const routes = [
                         name: 'Collections',
                         title: '点赞和收藏',
                         component: () => import('../components/pages/home/Collections.vue'),
+                    },
+                    {
+                        path: 'follows',
+                        name: 'Follows',
+                        title: '新增关注',
+                        component: () => import('../components/pages/home/Follows.vue'),
                     }
                 ]
             },
