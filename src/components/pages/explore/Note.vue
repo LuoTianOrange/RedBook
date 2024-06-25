@@ -109,12 +109,12 @@ const note = ref(null)
 const storedUser = localStorage.getItem('note')
 note.value = JSON.parse(storedUser)
 // likeStatus.value = note.value.
-console.log("note:",note.value)
+
 
 const likenote = ref(null)
 const storedNote = localStorage.getItem('likeNote')
 likenote.value = JSON.parse(storedNote)
-console.log("likenote:",likenote.value)
+
 
 function getFillColor(likeStatus) {
     if (likeStatus === true) {
@@ -137,7 +137,6 @@ function Like() {
                 if (response.status == 200) {
                     axios.get(`/api/note/noteDetail/${noteData.value.id}`)
                         .then((response) => {
-                            console.log(response.data.data)
                             noteStore.setNoteData(response.data.data)
                         }).catch((error) => {
                             console.error(error)
@@ -171,8 +170,6 @@ onMounted(async () => {
     noteData.value = noteStore.noteData.note;
     info.value = storeToRefs(noteStore.noteData.note)
     likeStatus.value = storeToRefs(noteStore.noteData.note.likeStatus)
-    console.log("likeStatus:",likeStatus.value)
-    console.log("noteData:", noteData)
     //获取评论数据
   
     //处理评论时间
@@ -180,7 +177,6 @@ onMounted(async () => {
     axios.get(`/api/comment/commentList/${noteData.value.id}`)
         .then((response) => {
             commentData.value = response.data.data
-            console.log("commentData:", commentData.value);
         }).catch((error) => {
             console.error(error)
         })
@@ -213,21 +209,17 @@ onMounted(async () => {
             };
         });
     });
-    console.log("CSData:", CSData);
 
 
     
     const storedNote = localStorage.getItem('user')
     user.value = JSON.parse(storedNote)
-    console.log("user:",user.value.userData.id)
     axios.get(`/api/like/getLikeInform/${user.value.userData.id}`)
         .then((response) => {
             likeNoteStore.setNoteData(response.data.data)
-            // console.log(response.data.data)
             const likes = response.data.data; 
             const filteredLikes = likes.filter(like => like.value.likeRecord.dzId === noteData.value.id); 
             likeNoteData.value = filteredLikes
-            console.log("filteredLikeNoteData:", likeNoteData.value); 
         }).catch((error) => {
             console.error(error)
         })

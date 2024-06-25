@@ -63,10 +63,8 @@ onMounted(async () => {
       let dz_id = item.likeRecord.dzId;
       return axios.get(`/api/note/selectNoteById/${dz_id}`)
         .then((res) => {
-          // console.log("res.data.note:", res.data.data[0].note.title);
           if (res.data.data[0].note.title) {
             item.noteTitle = res.data.data[0].note.title;
-            console.log("item:",item);
           }
         })
         .catch((err) => {
@@ -75,7 +73,6 @@ onMounted(async () => {
     });
 
     await Promise.all(promises);
-    console.log("daziStore", store.value);
 
     updateCurrentPageData();
     isLoading.value = false;

@@ -75,7 +75,6 @@ const user = ref(null)
 const files=ref('')
 //图片上传
 const handleSuccess = (file) => {
-  console.log(file);
   files.push(pictureList);
 }
 

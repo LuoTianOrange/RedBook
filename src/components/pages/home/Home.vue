@@ -127,7 +127,6 @@ let noteStore = ref([])
 
 axios.get('/api/note/notes').then((response) => {
   noteStore.value = response.data.data
-  console.log("response.data:", response.data.data);
   isLoading = false
 }).catch((error) => {
   console.error(error)

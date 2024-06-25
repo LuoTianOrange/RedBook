@@ -230,7 +230,6 @@ const  isLoggedIn = ref(false)
 //检查是否弹窗
 const CheckLogin = (item) => {
     if (item.loginRequired) {
-        console.log(item.loginRequired);
         LoginVisible.value = true
     }
 }

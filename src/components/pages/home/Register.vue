@@ -62,7 +62,6 @@ const onSubmit = () => {
         })
         return
     }
-    console.log(form)
 }
 </script>
 

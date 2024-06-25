@@ -84,7 +84,6 @@ onMounted(async () => {
         if (storedUser) {
             // 将 JSON 字符串解析为对象并赋值给 user 引用  
             user.value = JSON.parse(storedUser)
-            console.log(user.value)
             userInfoStore.value[0].username = user.value.userData.username
             userInfoStore.value[0].usercontent = user.value.userData.id
             userInfoStore.value[0].userdesc = user.value.userData.description
@@ -103,7 +102,6 @@ onMounted(async () => {
                 .then((response) => {
                     mynoteStore.setNoteData(response.data.data)         
                     MynoteStore.value = response.data.data             
-                    console.log(MynoteStore.value)
                 }).catch((error) => {
                     console.error(error)
                 })
@@ -114,7 +112,6 @@ onMounted(async () => {
                 .then((response) => {
                     mycollectStore.setNoteData(response.data.data)         
                     MycollectStore.value = response.data.data             
-                    console.log(MycollectStore.value)
                 }).catch((error) => {
                     console.error(error)
                 })
@@ -125,7 +122,6 @@ onMounted(async () => {
                 .then((response) => {
                     mylikeStore.setNoteData(response.data.data)         
                     MylikeStore.value = response.data.data             
-                    console.log(mylikeStore.value)
                 }).catch((error) => {
                     console.error(error)
                 })
@@ -141,7 +137,6 @@ onMounted(async () => {
 const userInfoSel = ref(1)
 const ChangeuserInfoNav = (index) => {
     userInfoSel.value = index
-    console.log(index);
 }
 const userInfoNav = [
     {
@@ -173,8 +168,6 @@ const userInfoStore = ref([{
         count: 0
     }]
 }])
-console.log(userInfoStore);
-
 
 //用于接收我的笔记的响应式数组
 const MynoteStore = ref([])
@@ -188,7 +181,6 @@ const notecount = ref(0)
  */
 onMounted(() => {
     notecount.value = MynoteStore.value.length
-    console.log(notecount)
     return notecount
 })
 
