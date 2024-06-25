@@ -54,7 +54,7 @@
                         <el-dropdown class="menu-item">
                             <template #dropdown>
                                 <el-dropdown-menu>
-                                    <el-dropdown-item>退出登录</el-dropdown-item>
+                                    <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
                                 </el-dropdown-menu>
                             </template>
                             <div class="menu-item-box">
@@ -163,6 +163,9 @@ const login = async () => {
     }
 };
 
+function logout(){ 
+      localStorage.removeItem('user');  
+}
 // const checkLoginStatus = () => {  
 //       const id = localStorage.getItem('user');  
 //       if (id) {  
