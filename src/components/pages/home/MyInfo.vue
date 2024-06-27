@@ -27,11 +27,17 @@
                 <div class="main-container">
                     <div class="main-container-flex">
                         <div class="note-item" v-for="i in displayedNotes" :key="i.id">
-                            <img :src="i.note.noteCover" class="note-img" @click="goToNote(i)">
+                            <el-image :src="i.note.noteCover" class="note-img" @click="goToNote(i)">
+                                <template #error>
+                                    <div class="image-slot">
+                                        <el-icon><icon-picture /></el-icon>
+                                    </div>
+                                </template>
+                            </el-image>
                             <div class="note-title">{{ i.note.title }}</div>
                             <div class="note-content">
                                 <img :src="i.avatar" class="avatar-img">
-                                <div class="mynote-username">{{i.username}}</div>
+                                <div class="mynote-username">{{ i.username }}</div>
                             </div>
                         </div>
                     </div>
@@ -56,7 +62,7 @@ import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import useNoteStore from '../../../stores/store'
-
+import { User as IconPicture } from '@element-plus/icons-vue'
 
 const mynoteStore = myNoteStore()
 const mycollectStore = myCollectNoteStore()
@@ -72,8 +78,8 @@ const user = ref(null)
 const noteList = useNoteStore()
 const router = useRouter()
 const goToNote = (noteData) => {
-  noteList.setNoteData(noteData)
-  router.push(`note/${noteData.note.id}`)
+    noteList.setNoteData(noteData)
+    router.push(`note/${noteData.note.id}`)
 }
 
 // 在组件挂载后从 localStorage 获取用户信息  
@@ -100,8 +106,8 @@ onMounted(async () => {
             //获取个人笔记信息
             axios.get(`/api/note/notes/${user.value.userData.id}`)
                 .then((response) => {
-                    mynoteStore.setNoteData(response.data.data)         
-                    MynoteStore.value = response.data.data             
+                    mynoteStore.setNoteData(response.data.data)
+                    MynoteStore.value = response.data.data
                 }).catch((error) => {
                     console.error(error)
                 })
@@ -110,18 +116,18 @@ onMounted(async () => {
             //获取作者收藏笔记列表
             axios.get(`/api/like/getLikeList/${user.value.userData.id}`)
                 .then((response) => {
-                    mycollectStore.setNoteData(response.data.data)         
-                    MycollectStore.value = response.data.data             
+                    mycollectStore.setNoteData(response.data.data)
+                    MycollectStore.value = response.data.data
                 }).catch((error) => {
                     console.error(error)
                 })
 
 
-             //获取作者点赞笔记列表
-             axios.get(`/api/collect/getCollectList/${user.value.userData.id}`)
+            //获取作者点赞笔记列表
+            axios.get(`/api/collect/getCollectList/${user.value.userData.id}`)
                 .then((response) => {
-                    mylikeStore.setNoteData(response.data.data)         
-                    MylikeStore.value = response.data.data             
+                    mylikeStore.setNoteData(response.data.data)
+                    MylikeStore.value = response.data.data
                 }).catch((error) => {
                     console.error(error)
                 })
@@ -193,20 +199,20 @@ const pageSize = 6
 const displayedNotes = computed(() => {
     const start = (currentPage.value - 1) * pageSize
     const end = start + pageSize
-    let notes;  
-    switch (userInfoSel.value) {  
+    let notes;
+    switch (userInfoSel.value) {
         case 1: // 笔记  
             notes = MynoteStore.value.slice(start, end); // 返回所有笔记  
-            break;  
+            break;
         case 2: // 收藏  
             notes = MycollectStore.value.slice(start, end); // 收藏的笔记  
-            break;  
+            break;
         case 3: // 点赞  
             notes = MylikeStore.value.slice(start, end); // 点赞的笔记  
-            break;  
-        default:  
+            break;
+        default:
             notes = []; // 默认返回空数组  
-        }return notes;          
+    }return notes;
 })
 
 // 当前页码改变时的处理函数
@@ -314,13 +320,15 @@ const isLastPage = computed(() => {
     justify-content: center;
     flex-direction: column;
 }
-.main-container{
+
+.main-container {
     max-width: 800px;
     max-height: calc(-290px + 100vh);
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+
 .main-container-flex {
     display: flex;
     flex-direction: row;
@@ -328,13 +336,13 @@ const isLastPage = computed(() => {
     justify-content: center;
 }
 
-.note-content{
+.note-content {
     width: 100%;
     display: flex;
-    
+
 }
 
-.avatar-img{
+.avatar-img {
     width: 20px;
     height: 20px;
     border-radius: 50%;
@@ -361,10 +369,22 @@ const isLastPage = computed(() => {
     object-position: top;
     border-radius: 12px;
 }
-.note-end{
+
+.note-end {
     padding: 10px 0;
 }
-.note-pagin{
+
+.note-pagin {
     padding-bottom: 20px;
+}
+
+.image-slot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 200px;
+  background: var(--el-fill-color-light);
+  color: var(--el-text-color-secondary);
 }
 </style>

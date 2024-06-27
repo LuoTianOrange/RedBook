@@ -45,12 +45,13 @@
           </div>
         </div> -->
         <VueFlexWaterfall
+          v-if="!isLoading"
           align-content="center"
-          col="4"
+          :col="groupSize"
           col-spacing="20"
           :break-at="{ 900: 3, 600: 2, 300: 1 }"
         >
-        <div class="main-item" v-for="i in groupedItems" :key="i.id" v-if="!isLoading">
+        <div class="main-item" v-for="i in noteStore" :key="i.id">
               <el-image style="object-fit: cover;width: 100%;" :src="i.note.noteCover" @click="goToNote(i)"
                 class="main-item-top">
                 <template #error>
@@ -117,12 +118,15 @@ onUnmounted(() => {
 
 // 计算属性，根据窗口宽度计算每行显示的元素数量
 const groupSize = computed(() => {
-  if (windowWidth.value >= 1200) {
-    return 6; // 宽屏显示时，每行4个元素  
-  } else if (windowWidth.value >= 900) {
-    return 5; // 中屏显示时，每行3个元素  
-  } else {
-    return 4; // 窄屏显示时，每行2个元素  
+  if (windowWidth.value >= 1500) {
+    return 5; // 宽屏显示时，每行5个元素  
+  } else if (windowWidth.value >= 1200) {
+    return 4; // 中屏显示时，每行4个元素  
+  } else if (windowWidth.value >= 900){
+    return 3; // 窄屏显示时，每行3个元素  
+  } else{
+    return 2; // 超窄屏显示时，每行2个元素  
+  
   }
 });
 
@@ -166,7 +170,7 @@ let noteStore = ref([])
 
 axios.get('/api/note/notes').then((response) => {
   noteStore.value = response.data.data
-  isLoading = false
+  isLoading.value = false
 }).catch((error) => {
   console.error(error)
 })
